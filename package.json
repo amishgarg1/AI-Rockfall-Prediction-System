@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Aadharbindal.github.io/AI-Rockfall-Prediction-System",
+  "homepage": "https://amishgarg1.github.io/AI-Rockfall-Prediction-System",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
