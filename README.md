@@ -175,4 +175,4 @@ npm run dev
 
 The production build of the dashboard is deployed and accessible live at:
 
-👉 **[https://aadharbindal.github.io/AI-Rockfall-Prediction-System/](https://aadharbindal.github.io/AI-Rockfall-Prediction-System/)**
+👉 **[https://amishgarg1.github.io/AI-Rockfall-Prediction-System/]((https://amishgarg1.github.io/AI-Rockfall-Prediction-System/))**
