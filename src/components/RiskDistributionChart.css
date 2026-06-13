@@ -1,0 +1,76 @@
+.risk-distribution-chart-container {
+  
+  border-radius: 8px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.risk-distribution-chart-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.chart-and-legend {
+  display: flex;
+  flex-direction: column; /* Stack chart and legend vertically */
+  align-items: center;
+  gap: 20px;
+}
+
+.donut-chart-placeholder {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  margin-bottom: 20px; /* Added margin to separate from legend */
+}
+
+.donut-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Removed .chart-center-text as the text is no longer present */
+.chart-center-text {
+  display: none;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* To push label and value to opposite ends */
+  font-size: 0.9em;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 0 5px currentColor; /* Dynamic shadow based on color */
+}
+
+.legend-label {
+  flex-grow: 1;
+  text-align: left;
+  /* Removed margin-right: 10px; as justify-content handles spacing */
+}
+
+.legend-value {
+  font-weight: bold;
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 30px; /* Ensure enough space for percentage */
+}

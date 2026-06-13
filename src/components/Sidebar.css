@@ -1,0 +1,323 @@
+.sidebar {
+  width: 280px;
+  /* background-color: #202b3b; */ /* Removed background color */
+  background-color: transparent;
+  color: #c0c7d1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-shrink: 0;
+  transition: width 0.3s ease-in-out;
+  position: relative; /* Needed for toggle button positioning */
+}
+
+.sidebar.closed {
+  width: 60px;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between; /* Space between logo and toggle button */
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 30px;
+}
+
+.sidebar.closed .sidebar-header {
+  padding: 0 10px; /* Adjust padding when closed */
+  justify-content: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px; /* Adjusted margin */
+}
+
+.sidebar.closed .logo-container {
+  gap: 0; /* Remove gap when closed */
+  margin-bottom: 0;
+}
+
+.logo-graphic {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  max-height: 60px;
+  overflow: hidden;
+  transition: opacity 0s ease, max-height 0s ease;
+}
+
+.sidebar.closed .logo-graphic {
+  opacity: 0;
+  max-height: 0;
+}
+
+.mountain {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 30px solid white;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+
+.letter-r {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #786648; /* Orange color */
+  position: absolute;
+  left: 15px;
+  top: 20px;
+}
+
+.signal {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #f39c12; /* Orange color */
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
+.hexagons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 2px;
+}
+
+.hexagon {
+  width: 15px;
+  height: 17px;
+  background-color: white;
+  position: relative;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon.small {
+  width: 10px;
+  height: 11px;
+  opacity: 0.7;
+  margin-top: 3px;
+}
+
+.logo-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  opacity: 1;
+  max-height: 60px; /* Adjust based on actual content height */
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.9s ease;
+}
+
+.sidebar.closed .logo-text-group {
+  opacity: 0;
+  max-height: 0;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  line-height: 1.2;
+
+}
+
+.logo-subtitle {
+  font-size: 14px;
+  color: #aebacd; /* Lighter grey for subtitle */
+  margin-top: 2px;
+  margin-left: 2px;
+}
+
+.navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: -40px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 8px;
+  flex-direction: row;
+  transition: background-color 0.3s ease;
+  position: relative;
+  margin-right: 25px;
+}
+
+.sidebar.closed .nav-item {
+  justify-content: center;
+  padding: 12px 0;
+  margin-left: 0px;
+  margin-right: 0;
+  pointer-events: none; /* Disable interaction when closed */
+}
+
+.nav-item:hover {
+  background: #414147;
+  background: linear-gradient(183deg, rgba(65, 65, 71, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%  );
+  margin-right: 25px;
+}
+
+.sidebar.closed .nav-item:hover {
+  background-color: transparent; /* Remove hover background when closed */
+  margin-right: 0;
+}
+
+.nav-item.active {
+  background-color: #464c56;
+  color: white;
+  margin-right: 15px;
+}
+
+.sidebar.closed .nav-item.active {
+  margin-right: 0;
+}
+
+.nav-item .icon {
+  font-size: 20px;
+  margin-right: 15px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  max-width: 20px; /* Adjust based on actual icon width */
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-width 0.3s ease, margin-right 0.3s ease;
+}
+
+.sidebar.closed .nav-item .icon {
+  opacity: 0;
+  max-width: 0;
+  margin-right: 0; /* Adjust to remove space */
+  transition: opacity 0.2s ease 0.1s, max-width 0.3s ease, margin-right 0.3s ease;
+}
+
+.nav-item .text {
+  font-size: 16px;
+  flex-grow: 1;
+  opacity: 1;
+  max-height: 20px; /* Adjust based on actual text height */
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.sidebar.closed .nav-item .text {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 0.2s ease 0.1s, max-height 0.3s ease;
+}
+
+.nav-link {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.sidebar.closed .nav-link {
+  justify-content: center;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.sidebar-toggle-btn {
+  background-color: #334054;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.2em;
+  position: absolute;
+  right: -15px;
+  top: 40px;
+  z-index: 1000;
+  transition: background-color 0.1s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: #4a5568;
+}
+
+.sidebar.closed .sidebar-toggle-btn {
+  right: -15px;  
+  top: 87%;
+}
+
+.sidebar-slider-container {
+  position: absolute;
+  right: -10px; /* Shift more to the left when open */
+  top: 2%;
+  width: 10px; /* Thinner track */
+  height: 630px; /* Longer track */
+  background: #414147;
+  background: linear-gradient(183deg, rgba(65, 65, 71, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%  );
+  border-radius: 0px;
+  cursor: pointer;
+  display: flex;
+  margin-right: 10px;
+  justify-content: center; /* Horizontally center the thumb */
+  align-items: center; /* Vertically center the thumb */
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.closed .sidebar-slider-container {
+  right: 10px; /* Position to the right when closed */
+}
+
+
+
+.sidebar-slider-thumb {
+  width: 20px; /* Width of the thumb */
+  height: 20px; /* Height of the thumb, making it round */
+  background-color: rgb(81, 71, 71); /* Thumb color */
+  border-radius: 0%; /* Rounded button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  color: black; /* Symbol color */
+  transition: transform 0.1s ease-in-out, background-color 0.1s ease;
+}
+
+
+
+/* Ensure other elements are not affected by the slider */
+.nav-item.has-submenu .submenu-toggle,
+.nav-item.has-submenu.open .submenu-toggle,
+.submenu,
+.sidebar.collapsed .submenu,
+.submenu-item {
+  display: none;
+}

@@ -1,0 +1,57 @@
+.status-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  min-width: 220px;
+  gap: 15px;
+}
+
+.status-card.high-risk {
+  background: #b80d0d;
+  background: linear-gradient(164deg, rgba(184, 13, 13, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%);
+  box-shadow: 0 0 15px #b80d0d;
+}
+
+.status-card.total-incidents {
+  box-shadow: 0 0 10px #ced904;
+  background: #ced904;
+  background: linear-gradient(166deg, rgba(206, 217, 4, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%);
+}
+
+.status-card.injuries {
+  background: #ff5900;
+  box-shadow: 0 0 10px #ff5900;
+  background: linear-gradient(157deg, rgba(255, 89, 0, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%);
+}
+
+.status-card.active-mines {
+  box-shadow: 0 0 10px #7fc22d;
+  background: #7fc22d;
+  background: linear-gradient(157deg, rgba(127, 194, 45, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%);
+}
+
+.card-icon {
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card-value {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+}

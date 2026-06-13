@@ -1,0 +1,96 @@
+.sensors-page {
+  padding: 20px;
+  color: #fcfcfc;
+}
+
+.sensors-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #4a5568;
+  color: white;
+  margin-bottom: 20px;
+  margin-top: -10px;
+  margin-right: -20px; /* To span full width */
+}
+
+.sensors-page-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+ 
+}
+
+.sensors-page-title {
+  margin: 0;
+  margin-left: -20px;
+  font-size: 28px;
+  color: white;
+}
+
+.location-alert-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alert-icon {
+  font-size: 24px;
+}
+
+.alert-text {
+  font-weight: bold;
+}
+
+.high-alert {
+  color: #ff4d4f; /* Red for high alert */
+}
+
+.medium-alert {
+  color: #faad14; /* Orange/Yellow for medium alert */
+}
+
+.success-alert {
+  color: #52c41a; /* Green for no alert/resolved */
+}
+
+/* Hide the old h1 if it still exists from previous styling */
+.sensors-page > h1 {
+  display: none;
+}
+
+.chart-container {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  min-height: 350px; /* Added a minimum height */
+  border: 1px solid rgb(201, 201, 201); /* Added for debugging */
+  background: #414147;
+  background: linear-gradient(183deg, rgba(65, 65, 71, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%);
+}
+
+.chart-title {
+  font-size: 1.5em;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.recharts-wrapper .recharts-surface {
+  background-color: transparent;
+}
+
+.recharts-cartesian-grid line {
+  stroke: #444;
+}
+
+.recharts-xAxis .recharts-cartesian-axis-tick-value,
+.recharts-yAxis .recharts-cartesian-axis-tick-value {
+  fill: #999;
+}
+
+.recharts-tooltip-wrapper .recharts-tooltip-item {
+  color: #fff !important;
+}

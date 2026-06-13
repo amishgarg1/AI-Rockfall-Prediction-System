@@ -1,0 +1,338 @@
+.signup-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.header{
+  display: flex;
+  /* margin-left: -100px; */ /* Remove or adjust based on new layout */
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: -26px;
+  margin-left: -100px;
+  margin-bottom: 10px; /* Add some space below the header */
+}
+
+.signup-page-container {
+  background: #414147;
+  background: linear-gradient(183deg, rgba(65, 65, 71, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%  );
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: flex; /* Corrected typo from fl4x to flex */
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  width: 90%;
+  max-width: 450px; /* Reverted to single column width */
+  max-height: 90vh; /* Limit height to 90% of viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #a0aec0; /* Lighter gray */
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: #cbd5e0; /* Even lighter gray on hover */
+}
+
+.app-brand {
+  text-align: center; /* Reverted to center alignment */
+  margin-bottom: 10px; /* Reverted margin */
+  margin-top: 20px;
+}
+
+.app-brand h1 {
+  font-size: 2rem; /* Reverted font size */
+  color: #edf2f7; /* White */
+  margin: 0;
+  font-weight: 700;
+}
+
+.app-brand p {
+  font-size: 1.1rem; /* Reverted font size */
+  margin-left: 0;
+  color: #a0aec0; /* Lighter gray */
+  margin-top: 5px;
+}
+
+/* No h2 needed now as per the image */
+.signup-page-container h2 {
+  display: none;
+}
+
+.signup-page-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-columns {
+  display: flex; /* Reverted to flex for single column */
+  flex-direction: column; /* Ensure single column layout */
+  gap: 20px; /* Reverted gap */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form groups within a column */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #a0aec0; /* Lighter gray */
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: 15px;
+  color: #718096; /* Gray icon */
+  font-size: 1.1rem;
+}
+
+.signup-page-container input[type="text"],
+.signup-page-container input[type="password"],
+.signup-page-container input[type="email"],
+.signup-page-container input[type="tel"] {
+  padding: 12px 15px; /* Adjusted padding to remove space for icon */
+  border: 1px solid #4a5568; /* Darker border */
+  border-radius: 8px;
+  background-color: #2d3748; /* Even darker background for input */
+  color: #edf2f7; /* White text */
+  font-size: 1rem;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.signup-page-container input[type="text"]:focus,
+.signup-page-container input[type="password"]:focus,
+.signup-page-container input[type="email"]:focus,
+.signup-page-container input[type="tel"]:focus {
+  outline: none;
+  border-color: #4299e1; /* Blue focus border */
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+}
+
+/* Styles for the new User Role dropdown */
+.select-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.select-with-icon select {
+  flex-grow: 1;
+  padding: 12px 12px 12px 15px; /* Adjust padding for consistency */
+  border: 1px solid #4a5568;
+  border-radius: 8px;
+  background-color: #2d3748;
+  color: #edf2f7;
+  font-size: 1rem;
+  appearance: none; /* Remove default dropdown arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 40px; /* Make space for custom arrow */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.select-with-icon select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+}
+
+.select-with-icon i {
+  position: absolute;
+  right: 15px;
+  color: #718096; /* Gray icon */
+  font-size: 0.8rem;
+  pointer-events: none; /* Make icon unclickable */
+}
+
+/* Styles for the new Mine/Site Location input with button */
+.input-with-button {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.input-with-button input[type="text"] {
+  flex-grow: 1;
+  padding: 12px 15px; /* Adjusted padding */
+  border: 1px solid #4a5568;
+  border-radius: 8px;
+  background-color: #2d3748;
+  color: #edf2f7;
+  font-size: 1rem;
+}
+
+.input-with-button input[type="text"]:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+}
+
+.get-location-button {
+  background-color: #4299e1; /* Blue button */
+  color: #edf2f7; /* White text */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.get-location-button:hover {
+  background-color: #3182ce; /* Darker blue on hover */
+  transform: translateY(-2px);
+}
+
+.get-location-button:active {
+  transform: translateY(0);
+}
+
+.error-message {
+  color: #fc8181; /* Red error */
+  margin-top: -5px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.success-message {
+  color: #48bb78; /* Green success */
+  margin-top: -5px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.signup-submit-button {
+  background-color: #4299e1; /* Blue button */
+  color: #edf2f7; /* White text */
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  max-width: 100%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.signup-submit-button:hover {
+  background-color: #3182ce; /* Darker blue on hover */
+  transform: translateY(-2px);
+}
+
+.signup-submit-button:active {
+  transform: translateY(0);
+}
+
+/* Custom scrollbar for SignupPage */
+.signup-page-container::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.signup-page-container::-webkit-scrollbar-track {
+  background: transparent; /* Make the track transparent */
+  border-radius: 0; /* No rounded corners */
+}
+
+.signup-page-container::-webkit-scrollbar-thumb {
+  background-color: #000; /* Black scrollbar thumb */
+  border-radius: 0; /* No rounded corners */
+}
+
+.signup-page-container::-webkit-scrollbar-thumb:hover {
+  background-color: #333; /* Darker black on hover */
+}
+
+.form-group input[type="file"] {
+  background: #23232a;
+  color: #aaa;
+  border: 1.5px solid #444;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  width: 100%;
+}
+
+.custom-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.custom-upload-btn {
+  display: inline-block;
+  background: #3182ce;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+.custom-upload-btn:hover {
+  background: #2563eb;
+}
+
+.id-proof-filename {
+  color: #aaa;
+  font-size: 0.97em;
+  margin-top: -11px;
+  word-break: break-all;
+  background: #23232a;
+  border-radius: 6px;
+  padding: 0.4em 0.8em;
+  border: 1.5px solid #444;
+  min-width: 120px;
+  text-align: left;
+}

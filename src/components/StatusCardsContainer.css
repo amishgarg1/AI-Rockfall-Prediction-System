@@ -1,0 +1,7 @@
+.status-cards-container {
+  display: flex;
+  justify-content: space-between; /* Distribute items evenly */
+  gap: 20px;
+  margin-bottom: 20px;
+  /* Removed flex-wrap: wrap; to keep them in a single row */
+}

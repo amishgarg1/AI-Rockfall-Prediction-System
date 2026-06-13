@@ -1,0 +1,147 @@
+.india-risk-map-container {
+  background-color: #2d3748; /* Reverted to solid background color */
+  /* background-image: url('../assets/mountain_landscape.jpg'); */
+  /* background-size: cover; */
+  /* background-position: center; */
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: #000000;
+  background-image: url('../assets/mp.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.map-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #ffffff;
+}
+
+.live-updates {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 15px;
+  font-weight: 700;
+  color: #000000;
+}
+.india-map-svg circle {
+  transform-origin: center;
+  cursor: pointer;
+}
+.india-map-svg circle red{
+  color: #69FF29;
+}
+.india-map-svg circle:hover {
+  transform: scale(1); /* Reduced scale for smoother hover */
+  transition: all 0.2s ease-in-out;
+}
+.live-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #000000;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 254, 0); }
+}
+/* circle{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #000000;
+  animation: pulse 1.5s infinite;
+} */
+.map-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 20px;
+  
+  
+}
+
+.india-map-placeholder {
+
+  /* Removed previous background and background-color */
+  background: none;
+  background-color: transparent;
+  border-radius: 8px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; /* Stack map and subtitle vertically */
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding-bottom: 20px; /* Add padding below map */
+}
+
+.india-map-svg {
+  width: 90%; /* Increase width for better visibility */
+  height: auto;
+  max-height: 400px;
+  /* Removed margin-bottom */
+}
+
+.india-map-svg .india-outline {
+  fill: transparent;
+  stroke: transparent; /* Make stroke transparent to completely hide outline */
+  stroke-width: 0.5px;
+}
+
+/* Removed regional map styles */
+.india-map-regions .map-region,
+.india-map-regions .map-region.high-risk,
+.india-map-regions .map-region.medium-risk,
+.india-map-regions .map-region.low-risk,
+.india-map-regions .map-region:hover {
+  display: none;
+}
+
+/* Removed map-subtitle styles */
+.map-subtitle {
+  display: none;
+}
+
+.risk-levels-legend {
+  display: none; /* Removed as legend is now in RiskDistributionChart */
+}
+
+.risk-levels-legend h3,
+.risk-levels-legend ul,
+.risk-levels-legend li,
+.legend-color,
+.legend-color.high-risk,
+.legend-color.medium-risk,
+.legend-color.low-risk {
+  display: none;
+}
+
+.risk-tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  pointer-events: none; /* Allows interactions with elements below */
+  z-index: 1000; /* Ensure tooltip is above other elements */
+  white-space: nowrap;
+}
