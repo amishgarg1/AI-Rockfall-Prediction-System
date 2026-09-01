@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Scikit--Learn-1.5-F7931E?logo=scikit-learn&logoColor=white&style=for-the-badge" alt="Scikit-Learn" />
   </p>
 
-  <h3><a href="https://ai-rockfall-prediction-system-phi.vercel.app"><b>Try the live app &rarr;</b></a></h3>
+  <h3><a href="https://ai-rockfall-prediction-system-ivory.vercel.app/"><b>Try the live app &rarr;</b></a></h3>
 
 </div>
 
@@ -179,7 +179,7 @@ npm run dev
 
 The platform runs as two deployed services:
 
-👉 **[https://ai-rockfall-prediction-system-phi.vercel.app](https://ai-rockfall-prediction-system-phi.vercel.app)**
+👉 **[https://ai-rockfall-prediction-system-ivory.vercel.app/](https://ai-rockfall-prediction-system-ivory.vercel.app/)**
 
 | Component | Host | Role |
 | :--- | :--- | :--- |
