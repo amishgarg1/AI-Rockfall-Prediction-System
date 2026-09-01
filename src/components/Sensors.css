@@ -1,96 +1,241 @@
+/* ==========================================================================
+   Sensors page — one site's telemetry
+   ========================================================================== */
+
 .sensors-page {
-  padding: 20px;
-  color: #fcfcfc;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8) var(--sp-12);
+  color: var(--text);
 }
+
+/* --- Header --------------------------------------------------------------- */
 
 .sensors-page-header {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #4a5568;
-  color: white;
-  margin-bottom: 20px;
-  margin-top: -10px;
-  margin-right: -20px; /* To span full width */
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--hairline);
+  animation: ms-fade-down var(--d-slow) var(--ease-out) backwards;
+}
+
+/* Site header, then the channel grid (self-staggered), then the chart. */
+.mine-header {
+  animation: ms-card-in var(--d-slow) var(--ease-out) 80ms backwards;
+}
+
+.chart-container {
+  animation: ms-card-in var(--d-slow) var(--ease-out) 300ms backwards;
 }
 
 .sensors-page-title-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
- 
+  gap: 4px;
+}
+
+.sensors-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.sensors-back-link svg {
+  width: 13px;
+  height: 13px;
+  transition: transform var(--d-fast) var(--ease-out);
+}
+
+.sensors-back-link:hover {
+  color: var(--accent-vivid);
+}
+
+.sensors-back-link:hover svg {
+  transform: translateX(-2px);
 }
 
 .sensors-page-title {
   margin: 0;
-  margin-left: -20px;
-  font-size: 28px;
-  color: white;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
 }
 
-.location-alert-status {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.alert-icon {
-  font-size: 24px;
-}
-
-.alert-text {
-  font-weight: bold;
-}
-
-.high-alert {
-  color: #ff4d4f; /* Red for high alert */
-}
-
-.medium-alert {
-  color: #faad14; /* Orange/Yellow for medium alert */
-}
-
-.success-alert {
-  color: #52c41a; /* Green for no alert/resolved */
-}
-
-/* Hide the old h1 if it still exists from previous styling */
+/* Legacy decoration, superseded by the header border. */
+.sensors-page-title-underline,
 .sensors-page > h1 {
   display: none;
 }
 
+/* --- Empty state ---------------------------------------------------------- */
+
+.sensors-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  max-width: 440px;
+  margin: var(--sp-12) auto;
+  padding: var(--sp-10) var(--sp-8);
+  text-align: center;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+}
+
+.sensors-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+}
+
+.sensors-empty-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.sensors-empty h1 {
+  font-size: var(--t-xl);
+  font-weight: 660;
+}
+
+.sensors-empty p {
+  margin-bottom: var(--sp-2);
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+/* --- Legacy alert pills --------------------------------------------------- */
+
+.location-alert-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.alert-icon {
+  font-size: var(--t-xl);
+}
+
+.alert-text {
+  font-weight: 660;
+}
+
+.high-alert    { color: var(--risk-critical-vivid); }
+.medium-alert  { color: var(--risk-high-vivid); }
+.success-alert { color: var(--risk-low-vivid); }
+
+/* --- Chart panel ---------------------------------------------------------- */
+
 .chart-container {
-  background-color: #1e1e1e;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-  min-height: 350px; /* Added a minimum height */
-  border: 1px solid rgb(201, 201, 201); /* Added for debugging */
-  background: #414147;
-  background: linear-gradient(183deg, rgba(65, 65, 71, 1) 0%, rgba(0, 0, 0, 1) 100%, rgba(69, 43, 43, 1) 100%);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.5) 0%, rgba(12, 12, 15, 0.86) 100%);
+  box-shadow: var(--shadow-md), var(--inner-light);
+}
+
+.chart-container-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
 }
 
 .chart-title {
-  font-size: 1.5em;
-  color: #ffffff;
-  margin-bottom: 20px;
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 620;
+  letter-spacing: -0.012em;
   text-align: left;
+  color: var(--text);
 }
+
+.chart-key {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chart-key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+}
+
+.chart-key-item span {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--key-color);
+  box-shadow: 0 0 9px var(--key-color);
+}
+
+.chart-key-item--incidents  { --key-color: var(--risk-high-vivid); }
+.chart-key-item--other      { --key-color: var(--risk-medium-vivid); }
+.chart-key-item--casualties { --key-color: var(--risk-critical-vivid); }
+
+/* --- recharts overrides --------------------------------------------------- */
 
 .recharts-wrapper .recharts-surface {
   background-color: transparent;
+  overflow: visible;
 }
 
-.recharts-cartesian-grid line {
-  stroke: #444;
-}
-
-.recharts-xAxis .recharts-cartesian-axis-tick-value,
-.recharts-yAxis .recharts-cartesian-axis-tick-value {
-  fill: #999;
+.recharts-tooltip-wrapper {
+  outline: none !important;
 }
 
 .recharts-tooltip-wrapper .recharts-tooltip-item {
-  color: #fff !important;
+  color: var(--text) !important;
+}
+
+.recharts-default-tooltip {
+  border-radius: var(--r-sm);
+}
+
+@media (max-width: 1100px) {
+  .sensors-page {
+    padding: var(--sp-5) var(--sp-5) var(--sp-10);
+  }
+}
+
+@media (max-width: 720px) {
+  .sensors-page {
+    padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  }
+
+  .sensors-page-title {
+    font-size: var(--t-xl);
+  }
+
+  .chart-container {
+    padding: var(--sp-4);
+  }
+
+  .chart-key {
+    gap: var(--sp-3);
+  }
 }

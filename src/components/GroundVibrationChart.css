@@ -1,130 +1,305 @@
-/* Styling for GroundVibrationChart component */
-/* This CSS is also used by GroundVibrationDetailPage */
+/* ==========================================================================
+   Ground vibration
+   Two surfaces share this file: the dashboard tile (.ground-vibration-chart)
+   and the full detail page (.ground-vibration-chart-container).
+   ========================================================================== */
 
-.ground-vibration-chart-container {
-  background-color: #2a2a2a; /* Darker background for the entire component */
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Enhanced shadow */
-  color: #e0e0e0;
-  padding: 30px;
-  padding-bottom: 40px;
-  margin: 25px auto; /* Centered horizontally, 25px top/bottom margin */
+/* --------------------------------------------------------------------------
+   Dashboard tile
+   -------------------------------------------------------------------------- */
+
+.ground-vibration-chart {
   display: flex;
   flex-direction: column;
-  width: 100%; /* Make width flexible */
-  max-width: 1200px; /* Max width to prevent it from becoming too wide */
-  min-height: 600px; /* Minimum height to give it some presence */
-  /* Removed fixed height and overflow: auto; to allow content to dictate height and remove inner scrollbar */
+  gap: var(--sp-4);
+  flex: 1;
+  width: 100%;
+  padding: var(--sp-5);
+  color: var(--text);
+}
+
+.gv-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.gv-heading h2 {
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 620;
+  letter-spacing: -0.012em;
+}
+
+.gv-heading h3 {
+  margin: 3px 0 0;
+  font-size: var(--t-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* --- Readout -------------------------------------------------------------- */
+
+.gv-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gv-value {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text);
+}
+
+.gv-unit {
+  font-size: var(--t-sm);
+  font-weight: 560;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.gv-readout-label {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+}
+
+/* --- Bars -----------------------------------------------------------------
+   preserveAspectRatio="none" lets the bar field stretch to the tile width,
+   so the rects need no per-viewport maths.
+   -------------------------------------------------------------------------- */
+
+.gv-chart {
+  margin-top: auto;
+}
+
+.gv-svg {
+  display: block;
+  width: 100%;
+  height: 96px;
+  overflow: visible;
+}
+
+.gv-bar {
+  fill: var(--accent);
+  opacity: 0.85;
+  transform-origin: bottom;
+  transform-box: fill-box;
+  /* Each bar rises from the axis, left to right. */
+  animation: gv-rise 480ms var(--ease-out) backwards;
+  transition: fill var(--d-fast) var(--ease-out), opacity var(--d-fast) var(--ease-out);
+}
+
+@keyframes gv-rise {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+.gv-bar:hover,
+.gv-bar.is-hovered {
+  opacity: 1;
+  fill: var(--accent-vivid);
+}
+
+/* Anything past the 1.0 mm/s blasting limit is called out in the alarm colour
+   rather than left for the reader to compare against the line by eye. */
+.gv-bar--over {
+  fill: var(--risk-critical-vivid);
+  opacity: 1;
+  filter: drop-shadow(0 0 6px var(--risk-critical-glow));
+}
+
+.gv-bar--over:hover {
+  fill: var(--risk-critical-vivid);
+}
+
+.gv-threshold {
+  stroke: var(--risk-critical-vivid);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: 0.55;
+}
+
+/* --------------------------------------------------------------------------
+   Detail page
+   -------------------------------------------------------------------------- */
+
+.ground-vibration-chart-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 600px;
+  margin: var(--sp-6) auto;
+  padding: var(--sp-8);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.55) 0%, rgba(12, 12, 15, 0.86) 100%);
+  box-shadow: var(--shadow-lg), var(--inner-light);
+  color: var(--text-secondary);
 }
 
 .chart-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 35px; /* Increased margin-bottom */
-  border-bottom: 1px solid #444;
-  padding-top: 15px; /* Added padding-top */
-  padding-bottom: 20px; /* Increased padding-bottom */
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-8);
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--hairline);
 }
 
 .chart-header h2 {
   margin: 0;
-  font-size: 1.8em;
-  color: #4CAF50;
-  margin-right: 20px; /* Add some right margin to the title */
+  font-size: var(--t-2xl);
+  font-weight: 680;
+  letter-spacing: -0.025em;
+  color: var(--text);
 }
 
 .controls-container {
   display: flex;
-  flex-direction: column; /* Stack controls vertically */
-  gap: 15px; /* Gap between the timeframe selector and the back button */
-  align-items: flex-end; /* Align controls to the right */
-  margin-top: -10px; /* Adjust top margin for better alignment with title */
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-3);
 }
 
 .timeframe-selector {
   display: flex;
-  gap: 10px; /* Gap between buttons */
   align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
 }
 
 .timeframe-selector button {
-  background-color: #555;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  /* Removed margin-left as gap handles spacing */
-  font-size: 0.9em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  transition: background-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out);
 }
 
 .timeframe-selector button:hover {
-  background-color: #666;
-  transform: translateY(-2px);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .timeframe-selector button.active {
-  background-color: #4CAF50; /* Green for active button */
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+  background: var(--accent-tint-strong);
+  color: var(--accent-vivid);
+  box-shadow: inset 0 0 0 1px rgba(243, 156, 18, 0.3);
 }
 
+/* Now a wrapper around the styled Select rather than a native control, so it
+   only has to reserve width. */
 .location-selector {
-  padding: 8px 15px;
-  border-radius: 20px;
-  border: 1px solid #555;
-  background-color: #383838;
-  color: white;
-  font-size: 0.9em;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
+  min-width: 190px;
 }
 
-.location-selector:hover {
-  border-color: #4CAF50;
+.back-to-dashboard-button {
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  transition: transform var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out);
 }
 
-.location-selector option {
-  background-color: #383838;
-  color: white;
+.back-to-dashboard-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .chart-area {
   position: relative;
-  height: 400px; /* Fixed height for the chart */
   width: 100%;
-  margin-bottom: 30px; /* Adjusted margin-bottom */
+  height: 400px;
+  margin-bottom: var(--sp-8);
 }
 
-.ground-vibration-chart {
-  background-color: #2d3748;
-  background-image: url('../assets/image.png');
-  background-size: cover;
-  background-position: 51% center;
-  background-repeat: no-repeat;
-  color: rgb(255, 255, 255);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+.summary-statistics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-8);
 }
 
-.ground-vibration-chart h2 {
-  margin-top: -215px;
-  margin-bottom: 5px;
-  font-size: 1.2em;
+.stat-card {
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  transition: border-color var(--d-base) var(--ease-out),
+              transform var(--d-base) var(--ease-out);
 }
 
-.ground-vibration-chart h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 0.9em;
-  color: #26bf40;
+.stat-card:hover {
+  border-color: var(--hairline-strong);
+  transform: translateY(-2px);
+}
+
+.stat-card h4 {
+  margin: 0 0 6px;
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.stat-card p strong {
+  color: inherit;
+}
+
+.contextual-info {
+  margin-top: var(--sp-6);
+  padding: var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--info);
+  background: var(--info-tint);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+}
+
+.contextual-info span {
+  font-weight: 660;
+  color: var(--text);
+}
+
+.threshold-line.high {
+  color: var(--risk-critical-vivid);
+}
+
+.weather-condition,
+.sensor-id,
+.sensor-location {
+  color: var(--text-secondary);
 }
 
 .vibration-chart-image,
@@ -132,60 +307,23 @@
   display: none;
 }
 
-.summary-statistics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px; /* Increased gap */
-  margin-bottom: 30px; /* Increased margin-bottom */
-}
+@media (max-width: 720px) {
+  .ground-vibration-chart {
+    padding: var(--sp-4);
+  }
 
-.contextual-info {
-  background-color: #383838;
-  padding: 20px; /* Consistent padding */
-  border-radius: 8px;
-  margin-top: 30px; /* Increased top margin for better separation */
-  padding-bottom: 20px; /* Consistent padding */
-  border-left: 4px solid #63b3ed; /* Blue accent border */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
+  .ground-vibration-chart-container {
+    padding: var(--sp-5);
+    margin: var(--sp-4) auto;
+  }
 
-.contextual-info span {
-  font-weight: bold;
-  color: #4CAF50; /* Green for key info */
-}
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.back-to-dashboard-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  /* margin-left: 0; This is already handled by gap in controls-container */
-  font-size: 0.9em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.back-to-dashboard-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-.stat-card h4 {
-  margin-top: 0;
-  margin-bottom: 5px; /* Reduced margin-bottom to bring value closer */
-  color: #a0aec0; /* Lighter color for labels */
-  font-size: 0.9em; /* Slightly smaller font for labels */
-  font-weight: 500; /* Lighter weight for labels */
-}
-
-.stat-card p {
-  margin: 0;
-  font-size: 1.4em; /* Larger font for values */
-  font-weight: bold;
-  color: #e0e0e0; /* White for main values */
-}
-
-.stat-card p strong {
-  color: inherit; /* Inherit color from parent p tag */
+  .controls-container {
+    align-items: flex-start;
+    width: 100%;
+  }
 }

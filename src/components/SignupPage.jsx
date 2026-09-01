@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './SignupPage.css';
+import { apiUrl } from '../config';
+import { BrandMark } from './LoginPage';
+import Select from './Select';
 // import { auth } from '../firebase'; // Removed
 // import { createUserWithEmailAndPassword } from 'firebase/auth'; // Removed
 
@@ -38,7 +41,7 @@ const SignupPage = ({ onSignupSuccess, onClose }) => {
         let apiError = '';
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/api/signup-excel', {
+            const response = await fetch(apiUrl('/api/signup'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,20 +113,10 @@ const SignupPage = ({ onSignupSuccess, onClose }) => {
             <div className="signup-page-container">
                 <button className="close-button" onClick={onClose}>&times;</button>
                 <div className='header'>
-                    <div className="logo-graphic">
-                        <div className="mountain"></div>
-                        <div className="letter-r">M</div>
-                        <div className="signal"></div>
-                        <div className="hexagons">
-                            <div className="hexagon"></div>
-                            <div className="hexagon small"></div>
-                            <div className="hexagon"></div>
-                            <div className="hexagon small"></div>
-                        </div>
-                    </div>
+                    <BrandMark />
                     <div className="app-brand">
                         <h1>MineSafe</h1>
-                        <p>AI & Geo-Data Platform</p>
+                        <p>AI &amp; Geo-Data Platform</p>
                     </div>
                 </div>
                 <h2>Sign Up</h2>
@@ -191,23 +184,21 @@ const SignupPage = ({ onSignupSuccess, onClose }) => {
                     {/* User Role dropdown */}
                     <div className="form-group">
                         <label htmlFor="userRole">User Role</label>
-                        <div className="select-with-icon">
-                            <select
-                                id="userRole"
-                                name="userRole"
-                                value={userRole}
-                                onChange={(e) => setUserRole(e.target.value)}
-                                required
-                            >
-                                <option value="">Select your role</option>
-                                <option value="safety_manager">Safety Manager</option>
-                                <option value="geotech_engineer">Geotechnical Specialist</option>
-                                <option value="site_engineer">Site Engineer</option>
-                                <option value="mine_surveyor">Mine Surveyor</option>
-                                <option value="mine_manager">Mine Manager</option>
-                            </select>
-                            <i className="fas fa-chevron-down"></i>
-                        </div>
+                        <Select
+                            id="userRole"
+                            name="userRole"
+                            ariaLabel="User role"
+                            value={userRole}
+                            onChange={setUserRole}
+                            options={[
+                                { value: '', label: 'Select your role' },
+                                { value: 'safety_manager', label: 'Safety Manager' },
+                                { value: 'geotech_engineer', label: 'Geotechnical Specialist' },
+                                { value: 'site_engineer', label: 'Site Engineer' },
+                                { value: 'mine_surveyor', label: 'Mine Surveyor' },
+                                { value: 'mine_manager', label: 'Mine Manager' },
+                            ]}
+                        />
                     </div>
                     {/* Mine/Site Location input with button */}
                     <div className="form-group">

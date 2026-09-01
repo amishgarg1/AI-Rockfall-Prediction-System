@@ -1,60 +1,198 @@
+/* ==========================================================================
+   Recent alerts tile
+   The old rules positioned this with negative margins (margin-top: -80px on
+   the heading, margin-top: 60px on the panel) and a hardcoded 500px cap, so
+   it drifted out of alignment with the two tiles beside it. It is now a plain
+   flex column that fills its grid cell.
+   ========================================================================== */
+
 .recent-alerts {
-  padding: 20px;
-  color: white;
   display: flex;
   flex-direction: column;
-  background-color: #2d3748; /* Original background color or a default */
+  gap: var(--sp-4);
+  flex: 1;
   width: 100%;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  background-image: url('../assets/ground.png');
-  background-size: cover;
-  background-position: 30%; /* Shift the image further downward */
-  height: 100%;
-  max-width: 500px;
-  margin-top: 60px;
-  box-shadow: 0 1px 10px 5px rgba(0, 0, 0, 0.5); /* Black shadow on the bottom */
-  transition: background-position 0.3s ease, margin-left 0.4s ease, margin-top 0.3s ease, box-shadow 0.3s ease;
+  padding: var(--sp-5);
+  color: var(--text);
 }
 
-.main-content-container.sidebar-closed .recent-alerts {
-  background-position: right;
-  text-align: center;
-  margin-top: 60px;
-  box-shadow: none;
-  margin-left: 40px;
-}
-
-.main-content-container.sidebar-closed .alerts-header h2{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: -40px;
-}
 .alerts-header {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: space-between;
+  gap: var(--sp-3);
 }
 
 .alerts-header h2 {
-  margin-top: -80px;
-  font-size: 1.3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 620;
+  letter-spacing: -0.012em;
 }
 
-.alerts-header span {
-  font-size: 1.5em;
-  cursor: pointer;
+.alerts-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px 5px 11px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  color: var(--text-muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  transition: color var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out);
 }
+
+.alerts-view-all svg {
+  width: 13px;
+  height: 13px;
+  transition: transform var(--d-fast) var(--ease-out);
+}
+
+.alerts-view-all:hover {
+  color: var(--text);
+  border-color: var(--hairline-strong);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.alerts-view-all:hover svg {
+  transform: translateX(2px);
+}
+
+/* --- Rows ----------------------------------------------------------------- */
 
 .alerts-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  flex-grow: 1;
+  gap: var(--sp-2);
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  text-align: left;
+  transition: border-color var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out),
+              transform var(--d-fast) var(--ease-out);
+}
+
+.alert-row:hover {
+  border-color: var(--row-border, var(--hairline-strong));
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(2px);
+}
+
+/* Severity reads as a colour bar down the leading edge, so the list can be
+   scanned by colour before any text is read. */
+.alert-row-marker {
+  flex-shrink: 0;
+  width: 3px;
+  border-radius: var(--r-pill);
+  background: var(--row-color, var(--text-muted));
+  box-shadow: 0 0 10px var(--row-color, transparent);
+}
+
+.alert-row--high {
+  --row-color: var(--risk-critical-vivid);
+  --row-border: rgba(242, 44, 44, 0.34);
+}
+
+.alert-row--medium {
+  --row-color: var(--risk-medium-vivid);
+  --row-border: rgba(228, 239, 44, 0.3);
+}
+
+.alert-row--low {
+  --row-color: var(--risk-low-vivid);
+  --row-border: rgba(158, 220, 76, 0.3);
+}
+
+.alert-row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.alert-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.alert-row-location {
+  font-size: var(--t-sm);
+  font-weight: 640;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alert-row-description {
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alert-row-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: 2px;
+}
+
+.alert-row-status {
+  padding: 1px 7px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  font-size: 0.625rem;
+  font-weight: 660;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.alert-row-status--active {
+  border-color: rgba(242, 44, 44, 0.3);
+  color: var(--risk-critical-vivid);
+}
+
+.alert-row-status--acknowledged {
+  border-color: rgba(243, 156, 18, 0.3);
+  color: var(--accent-vivid);
+}
+
+.alert-row-status--resolved {
+  border-color: rgba(158, 220, 76, 0.28);
+  color: var(--risk-low-vivid);
+}
+
+.alert-row-time {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+@media (max-width: 720px) {
+  .recent-alerts {
+    padding: var(--sp-4);
+  }
 }

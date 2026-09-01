@@ -1,4 +1,23 @@
-pandas
-scikit-learn
+# Web layer
 Flask
-openpyxl
+flask-cors
+gunicorn
+
+# Database
+psycopg2-binary
+
+# ML / data
+#
+# Both pins exist because the .joblib pipelines are pickles, and a pickle only
+# reloads reliably on the library versions it was written with.
+#
+#   scikit-learn - the pipelines report 1.5.2; a different version raises
+#                  InconsistentVersionWarning and is not guaranteed to load.
+#   numpy        - the arrays inside them were written by numpy 1.x. numpy 2.0
+#                  reorganised its internals, so a 1.x pickle can fail to load
+#                  under 2.x. Unpinned, pip installs 2.x and /predict breaks on
+#                  the host while still working locally.
+scikit-learn==1.5.2
+numpy>=1.26,<2
+pandas
+joblib

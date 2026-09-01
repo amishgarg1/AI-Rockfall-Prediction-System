@@ -1,253 +1,471 @@
-/* WhatIfTool.css */
+/* ==========================================================================
+   What-if geotechnical simulator
+   ========================================================================== */
 
 .what-if-tool-container {
-  padding: 20px;
-  background-color: #2a2a2a;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  margin-top: 20px;
-  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(165deg, rgba(52, 53, 61, 0.5) 0%, rgba(10, 10, 13, 0.9) 100%);
+  box-shadow: var(--shadow-lg), var(--inner-light);
+  color: var(--text);
 }
 
 .what-if-tool-header {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--hairline);
 }
 
 .what-if-tool-header h2 {
-  color: #4CAF50; /* Green color for emphasis */
-  margin: 0;
+  margin-top: 2px;
+  font-size: var(--t-xl);
+  font-weight: 680;
+  letter-spacing: -0.025em;
 }
 
 .what-if-tool-container .back-button {
-  background-color: #007bff; /* Blue */
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-weight: 620;
+  transition: transform var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
 }
 
 .what-if-tool-container .back-button:hover {
-  background-color: #0056b3;
+  transform: translateY(-2px);
+  border-color: rgba(243, 156, 18, 0.45);
+  color: var(--text);
 }
 
 .tool-description {
-  margin-bottom: 25px;
+  font-size: var(--t-sm);
   line-height: 1.6;
-  font-size: 0.95em;
-  color: #bbb;
+  color: var(--text-muted);
+  max-width: 70ch;
 }
 
-.scenario-selection {
-  margin-bottom: 30px;
-  padding: 15px;
-  background-color: #383838;
-  border-radius: 6px;
-}
+/* --------------------------------------------------------------------------
+   Scenario picker
+   -------------------------------------------------------------------------- */
 
 .scenario-selection h3 {
-  color: #e0e0e0;
-  margin-top: 0;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 10px;
+  margin-bottom: var(--sp-3);
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
 .scenario-buttons {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: var(--sp-3);
 }
 
 .scenario-button {
-  background-color: #555;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  flex-grow: 1;
-  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  text-align: left;
+  transition: transform var(--d-base) var(--ease-out),
+              border-color var(--d-base) var(--ease-out),
+              background-color var(--d-base) var(--ease-out),
+              box-shadow var(--d-base) var(--ease-out);
 }
 
 .scenario-button:hover {
-  background-color: #666;
   transform: translateY(-2px);
+  border-color: var(--hairline-strong);
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .scenario-button.active {
-  background-color: #4CAF50; /* Green when active */
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
-  font-weight: bold;
+  border-color: rgba(243, 156, 18, 0.5);
+  background: var(--accent-tint);
+  box-shadow: 0 0 24px -12px var(--accent-glow);
 }
 
+.scenario-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-muted);
+  transition: color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
+}
+
+.scenario-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.scenario-button.active .scenario-icon {
+  border-color: rgba(243, 156, 18, 0.4);
+  color: var(--accent-vivid);
+}
+
+.scenario-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.scenario-label {
+  font-size: var(--t-base);
+  font-weight: 620;
+  color: var(--text);
+}
+
+.scenario-blurb {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+}
+
+.scenario-placeholder {
+  padding: var(--sp-8);
+  text-align: center;
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+  border-radius: var(--r-md);
+  border: 1px dashed var(--hairline-strong);
+}
+
+/* --------------------------------------------------------------------------
+   Scenario inputs
+   -------------------------------------------------------------------------- */
+
 .scenario-input-card {
-  background-color: #383838;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 25px;
-  border-left: 5px solid #4CAF50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  animation: ms-fade-up var(--d-base) var(--ease-out);
 }
 
 .scenario-input-card h4 {
-  color: #4CAF50;
-  margin-top: 0;
-  margin-bottom: 10px;
+  font-size: var(--t-base);
+  font-weight: 640;
 }
 
-.scenario-input-card p {
-  margin-bottom: 15px;
-  color: #ccc;
+.scenario-input-card > p {
+  font-size: var(--t-sm);
+  line-height: 1.6;
+  color: var(--text-muted);
 }
 
-.scenario-input-card input[type="text"] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background-color: #444;
-  color: white;
-  font-size: 1em;
-}
-
-.scenario-input-card input[type="text"]::placeholder {
-  color: #999;
+.input-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: var(--sp-4);
 }
 
 .input-group {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .input-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #e0e0e0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: var(--t-xs);
+  font-weight: 620;
+  color: var(--text-secondary);
+}
+
+/* Marks which fields actually reach the model. The simulator collects a
+   couple of contextual figures that the current feature vector does not
+   carry, and saying so beats letting an operator assume otherwise. */
+.input-hint {
+  padding: 1px 6px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  font-size: 0.5625rem;
   font-weight: 600;
-  font-size: 0.95em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
-.input-group input[type="number"] {
-  width: calc(100% - 20px); /* Adjust for padding */
-  padding: 10px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background-color: #444;
-  color: white;
-  font-size: 1em;
-  transition: border-color 0.2s;
+.input-group input {
+  width: 100%;
+  padding: 10px 13px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: rgba(0, 0, 0, 0.36);
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+  transition: border-color var(--d-fast) var(--ease-out), box-shadow var(--d-fast) var(--ease-out);
 }
 
-.input-group input[type="number"]:focus {
-  border-color: #4CAF50;
+.input-group input::placeholder {
+  color: var(--text-faint);
+}
+
+.input-group input:focus {
   outline: none;
-}
-
-.input-group input[type="number"]::placeholder {
-  color: #999;
+  border-color: rgba(243, 156, 18, 0.55);
+  box-shadow: 0 0 0 3px var(--accent-tint);
 }
 
 .run-simulation-button {
-  background-color: #28a745; /* Green */
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.05em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  align-self: flex-start;
+  padding: 11px 24px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(243, 156, 18, 0.45);
+  background: linear-gradient(180deg, var(--accent-vivid), var(--accent-deep));
+  color: #1a1205;
+  font-size: var(--t-sm);
+  font-weight: 700;
+  box-shadow: 0 6px 20px -10px var(--accent-glow);
+  transition: transform var(--d-fast) var(--ease-out), box-shadow var(--d-base) var(--ease-out);
 }
 
-.run-simulation-button:hover {
-  background-color: #218838;
+.run-simulation-button:hover:not(:disabled) {
   transform: translateY(-2px);
+  box-shadow: 0 12px 28px -10px var(--accent-glow);
 }
+
+.run-simulation-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Errors
+   -------------------------------------------------------------------------- */
+
+.simulation-error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid rgba(242, 44, 44, 0.34);
+  background: var(--risk-critical-tint);
+  font-size: var(--t-sm);
+  animation: ms-fade-down var(--d-base) var(--ease-out);
+}
+
+.simulation-error span {
+  flex: 1;
+}
+
+.simulation-error button {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-xs);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.simulation-error button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Results
+   -------------------------------------------------------------------------- */
 
 .simulation-results-card {
-  background-color: #383838;
-  padding: 25px;
-  border-radius: 8px;
-  border: 1px solid #4CAF50;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--tone-border, var(--hairline));
+  background:
+    linear-gradient(140deg, var(--tone-tint, transparent) -20%, rgba(10, 10, 13, 0.9) 55%),
+    var(--surface-1);
+  animation: ms-fade-up var(--d-slow) var(--ease-out);
 }
 
-.simulation-results-card h3 {
-  color: #4CAF50;
-  margin-top: 0;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #555;
-  padding-bottom: 10px;
+.risk-tone-high {
+  --tone-color: var(--risk-critical-vivid);
+  --tone-glow: var(--risk-critical-glow);
+  --tone-tint: var(--risk-critical-tint);
+  --tone-border: rgba(242, 44, 44, 0.32);
 }
 
-.simulation-results-card p {
-  margin-bottom: 10px;
-  color: #e0e0e0;
-  line-height: 1.6;
+.risk-tone-moderate {
+  --tone-color: var(--risk-high-vivid);
+  --tone-glow: var(--risk-high-glow);
+  --tone-tint: var(--risk-high-tint);
+  --tone-border: rgba(255, 128, 56, 0.3);
 }
 
-.simulation-results-card p strong {
-  color: #4CAF50;
+.risk-tone-low {
+  --tone-color: var(--risk-low-vivid);
+  --tone-glow: var(--risk-low-glow);
+  --tone-tint: var(--risk-low-tint);
+  --tone-border: rgba(158, 220, 76, 0.3);
 }
 
-.impact-statement {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #2e2e2e;
-  border-left: 4px solid #007bff;
-  border-radius: 4px;
-  font-style: italic;
-  color: #bbb;
-  font-size: 0.9em;
+.simulation-results-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
 }
 
-.impact-statement:last-of-type {
-  margin-bottom: 0;
+.simulation-results-head h3 {
+  font-size: var(--t-base);
+  font-weight: 640;
 }
 
-.risk-level-display {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: bold;
-  background-color: #2e2e2e; /* Darker background for distinction */
-  border: 1px solid #555;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+.risk-badge {
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--tone-border);
+  background: var(--tone-tint);
+  color: var(--tone-color);
+  font-size: var(--t-xs);
+  font-weight: 680;
+  white-space: nowrap;
 }
 
-.risk-level-display h4 {
+.simulation-headline {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.simulation-probability {
+  font-size: var(--t-4xl);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--tone-color);
+  text-shadow: 0 0 30px var(--tone-glow);
+}
+
+.simulation-suffix {
+  font-size: var(--t-xl);
+  font-weight: 600;
+}
+
+.simulation-caption {
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+.simulation-bar {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.simulation-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), var(--tone-color));
+  box-shadow: 0 0 16px -3px var(--tone-glow);
+  transform-origin: left center;
+  animation: ms-bar-grow 900ms var(--ease-out) 120ms backwards;
+}
+
+/* --- Parameter readout ---------------------------------------------------- */
+
+.simulation-inputs {
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--sp-3);
+}
+
+.simulation-inputs summary {
+  cursor: pointer;
+  font-size: var(--t-xs);
+  font-weight: 620;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.simulation-inputs summary:hover {
+  color: var(--text);
+}
+
+.simulation-inputs dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+  gap: 2px var(--sp-5);
+  margin: var(--sp-3) 0 0;
+}
+
+.simulation-input-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--hairline-faint);
+}
+
+.simulation-input-row dt {
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+}
+
+.simulation-input-row dd {
   margin: 0;
-  color: #e0e0e0;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-weight: 620;
+  color: var(--text-secondary);
 }
 
-.risk-level-display .risk-High {
-  color: #e53e3e; /* Red */
-  animation: pulse-red 1.5s infinite alternate;
-}
+/* Legacy hooks kept so nothing that still targets them loses its colour. */
+.risk-level-display .risk-High     { color: var(--risk-critical-vivid); }
+.risk-level-display .risk-Moderate { color: var(--risk-high-vivid); }
+.risk-level-display .risk-Low      { color: var(--risk-low-vivid); }
 
-.risk-level-display .risk-Moderate {
-  color: #dd6b20; /* Orange */
-  animation: pulse-orange 1.5s infinite alternate;
-}
+@media (max-width: 720px) {
+  .what-if-tool-container {
+    padding: var(--sp-4);
+  }
 
-.risk-level-display .risk-Low {
-  color: #48bb78; /* Green */
-}
+  .scenario-buttons {
+    grid-template-columns: 1fr;
+  }
 
-@keyframes pulse-red {
-  from { transform: scale(1); opacity: 1; }
-  to { transform: scale(1.05); opacity: 0.9; }
-}
-
-@keyframes pulse-orange {
-  from { transform: scale(1); opacity: 1; }
-  to { transform: scale(1.03); opacity: 0.95; }
+  .run-simulation-button {
+    align-self: stretch;
+  }
 }

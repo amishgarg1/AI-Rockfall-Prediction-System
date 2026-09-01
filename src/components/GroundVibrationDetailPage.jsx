@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import './GroundVibrationChart.css'; // This CSS will also be used by the detail page
+import Select from './Select';
 
 ChartJS.register(
   CategoryScale,
@@ -73,18 +74,30 @@ const generateVibrationData = (timeframe, location) => {
   return {
     labels,
     datasets: [
+      /* Series colours come off the platform palette rather than Chart.js's
+         defaults: PPV is the measurement that trips alarms, so it carries the
+         amber signal colour, and frequency reads as the cool secondary. */
       {
         label: 'Peak Particle Velocity (mm/s)',
         data: dataPoints.map(dp => dp.ppv),
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: '#ffb43d',
+        backgroundColor: 'rgba(243, 156, 18, 0.18)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.3,
+        fill: true,
         yAxisID: 'y',
       },
       {
         label: 'Frequency (Hz)',
         data: dataPoints.map(dp => dp.frequency),
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        borderColor: '#6aa9d8',
+        backgroundColor: 'rgba(106, 169, 216, 0.12)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.3,
         yAxisID: 'y1',
       },
     ],
@@ -117,20 +130,36 @@ const GroundVibrationDetailPage = ({ onBackToDashboard }) => {
     plugins: {
       title: {
         display: true,
-        text: `Ground Vibration Data for ${selectedLocation} - Last ${timeframe === '1h' ? '1 Hour' : timeframe === '24h' ? '24 Hours' : '7 Days'}`, 
-        color: '#e0e0e0',
-        font: { size: 18 }
+        text: `Ground Vibration Data for ${selectedLocation} - Last ${timeframe === '1h' ? '1 Hour' : timeframe === '24h' ? '24 Hours' : '7 Days'}`,
+        color: '#f3f5f8',
+        font: { size: 16, weight: '600' },
+        padding: { bottom: 18 },
       },
       legend: {
         labels: {
-          color: '#e0e0e0',
+          color: '#c0c7d1',
+          usePointStyle: true,
+          pointStyle: 'circle',
+          boxWidth: 8,
+          padding: 16,
         }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(10,10,12,0.94)',
+        borderColor: 'rgba(255,255,255,0.12)',
+        borderWidth: 1,
+        titleColor: '#8d94a1',
+        bodyColor: '#f3f5f8',
+        padding: 10,
+        cornerRadius: 10,
+        displayColors: true,
+        usePointStyle: true,
       },
     },
     scales: {
       x: {
-        grid: { color: 'rgba(255,255,255,0.1)' },
-        ticks: { color: '#e0e0e0' },
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        ticks: { color: '#8d94a1' },
       },
       y: {
         type: 'linear',
@@ -139,10 +168,10 @@ const GroundVibrationDetailPage = ({ onBackToDashboard }) => {
         title: {
           display: true,
           text: 'PPV (mm/s)',
-          color: '#e53e3e',
+          color: '#ffb43d',
         },
-        grid: { color: 'rgba(255,255,255,0.1)' },
-        ticks: { color: '#e0e0e0' },
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        ticks: { color: '#8d94a1' },
         suggestedMax: 20,
         suggestedMin: 0,
       },
@@ -153,10 +182,10 @@ const GroundVibrationDetailPage = ({ onBackToDashboard }) => {
         title: {
           display: true,
           text: 'Frequency (Hz)',
-          color: '#63b3ed',
+          color: '#6aa9d8',
         },
         grid: { drawOnChartArea: false },
-        ticks: { color: '#e0e0e0' },
+        ticks: { color: '#8d94a1' },
         suggestedMax: 20,
         suggestedMin: 0,
       },
@@ -182,11 +211,18 @@ const GroundVibrationDetailPage = ({ onBackToDashboard }) => {
             <button onClick={() => setTimeframe('24h')} className={timeframe === '24h' ? 'active' : ''}>Last 24h</button>
             <button onClick={() => setTimeframe('7d')} className={timeframe === '7d' ? 'active' : ''}>Last 7 Days</button>
           </div>
-          <select onChange={(e) => setSelectedLocation(e.target.value)} value={selectedLocation} className="location-selector">
-            <option value="Jharia Coalfield">Jharia Coalfield</option>
-            <option value="Raniganj Coalfield">Raniganj Coalfield</option>
-            <option value="Bokaro Coalfield">Bokaro Coalfield</option>
-          </select>
+          <div className="location-selector">
+            <Select
+              ariaLabel="Select monitoring location"
+              value={selectedLocation}
+              onChange={setSelectedLocation}
+              options={[
+                { value: 'Jharia Coalfield', label: 'Jharia Coalfield' },
+                { value: 'Raniganj Coalfield', label: 'Raniganj Coalfield' },
+                { value: 'Bokaro Coalfield', label: 'Bokaro Coalfield' },
+              ]}
+            />
+          </div>
           <button onClick={onBackToDashboard} className="back-to-dashboard-button">Back to Dashboard</button>
         </div>
       </div>

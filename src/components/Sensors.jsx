@@ -2,7 +2,7 @@ import React from 'react';
 import './Sensors.css';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import MineOverview from './MineOverview';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const locationsData = [
   {
@@ -155,52 +155,96 @@ const Sensors = () => {
 
 
   if (!selectedLocation) {
-    return <div className="sensors-page"><h1>Location not found</h1></div>;
+    return (
+      <div className="sensors-page">
+        <div className="sensors-empty">
+          <span className="sensors-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m16.5 16.5 4 4" />
+            </svg>
+          </span>
+          <h1>Location not found</h1>
+          <p>No monitored site matches this identifier.</p>
+          <Link to="/sensoring" className="ms-btn">Back to mining locations</Link>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="sensors-page">
       <header className="sensors-page-header">
         <div className="sensors-page-title-container">
-          <h1 className="sensors-page-title">Sensors</h1>
-          <div className="sensors-page-title-underline"></div>
+          <Link to="/sensoring" className="sensors-back-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M10 3.5 5.5 8l4.5 4.5" />
+            </svg>
+            Mining locations
+          </Link>
+          <h1 className="sensors-page-title">Sensor Telemetry</h1>
         </div>
+        <span className="ms-live">
+          <span className="ms-dot" aria-hidden="true" />
+          Live feed
+        </span>
       </header>
       <MineOverview mineData={selectedLocation.mineData} sensorData={selectedLocation.sensorData} />
-      
+
       <div className="chart-container">
-        <h2 className="chart-title">Mining Incidents & Casualties Timeline</h2>
+        <div className="chart-container-head">
+          <h2 className="chart-title">Mining Incidents &amp; Casualties Timeline</h2>
+          <ul className="chart-key">
+            <li className="chart-key-item chart-key-item--incidents"><span /> Incidents</li>
+            <li className="chart-key-item chart-key-item--other"><span /> Other events</li>
+            <li className="chart-key-item chart-key-item--casualties"><span /> Casualties</li>
+          </ul>
+        </div>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart
             data={selectedLocation.chartData || []}
             margin={{
               top: 10,
-              right: 30,
-              left: 0,
+              right: 12,
+              left: -12,
               bottom: 0,
             }}
           >
+            {/* Series colours come off the platform risk scale rather than the
+                default recharts brights, so this chart reads as part of the
+                same system as the cards and the map. */}
             <defs>
               <linearGradient id="colorIncidents" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ff7300" stopOpacity={0.7}/>
-                <stop offset="100%" stopColor="#ff7300" stopOpacity={0.8}/>
+                <stop offset="0%" stopColor="#ff8038" stopOpacity={0.55}/>
+                <stop offset="100%" stopColor="#ff8038" stopOpacity={0.05}/>
               </linearGradient>
               <linearGradient id="colorOther" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#FFD700" stopOpacity={0.7}/>
-                <stop offset="100%" stopColor="#FFD700" stopOpacity={0.2}/>
+                <stop offset="0%" stopColor="#e4ef2c" stopOpacity={0.45}/>
+                <stop offset="100%" stopColor="#e4ef2c" stopOpacity={0.04}/>
               </linearGradient>
               <linearGradient id="colorCasualties" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ff0000" stopOpacity={0.7}/>
-                <stop offset="100%" stopColor="#ff0000" stopOpacity={0.2}/>
+                <stop offset="0%" stopColor="#f22c2c" stopOpacity={0.55}/>
+                <stop offset="100%" stopColor="#f22c2c" stopOpacity={0.05}/>
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-            <XAxis dataKey="name" stroke="#999" />
-            <YAxis stroke="#999" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ backgroundColor: '#333', border: 'none', color: '#fff' }} />
-            <Area type="monotone" dataKey="incidents" stackId="1" stroke="#ff7300" fill="url(#colorIncidents)" />
-            <Area type="monotone" dataKey="other" stackId="1" stroke="#FFD700" fill="url(#colorOther)" />
-            <Area type="monotone" dataKey="casualties" stackId="1" stroke="#ff0000" fill="url(#colorCasualties)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.07)" vertical={false} />
+            <XAxis dataKey="name" stroke="rgba(255,255,255,0.28)" tickLine={false} axisLine={false} tick={{ fill: '#8d94a1', fontSize: 12 }} />
+            <YAxis stroke="rgba(255,255,255,0.28)" tickLine={false} axisLine={false} tick={{ fill: '#8d94a1', fontSize: 12 }} />
+            <Tooltip
+              cursor={{ stroke: 'rgba(255,255,255,0.2)', strokeDasharray: '3 3' }}
+              contentStyle={{
+                backgroundColor: 'rgba(10,10,12,0.94)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 10,
+                color: '#f3f5f8',
+                fontSize: 13,
+                boxShadow: '0 18px 48px -12px rgba(0,0,0,0.6)',
+              }}
+              labelStyle={{ color: '#8d94a1', fontSize: 11, marginBottom: 4 }}
+            />
+            <Area type="monotone" dataKey="incidents" stackId="1" stroke="#ff8038" strokeWidth={2} fill="url(#colorIncidents)" />
+            <Area type="monotone" dataKey="other" stackId="1" stroke="#e4ef2c" strokeWidth={2} fill="url(#colorOther)" />
+            <Area type="monotone" dataKey="casualties" stackId="1" stroke="#f22c2c" strokeWidth={2} fill="url(#colorCasualties)" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

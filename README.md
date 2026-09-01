@@ -7,15 +7,18 @@
     <img src="https://img.shields.io/badge/Vite-7.0-646CFF?logo=vite&logoColor=white&style=for-the-badge" alt="Vite" />
     <img src="https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white&style=for-the-badge" alt="Python" />
     <img src="https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white&style=for-the-badge" alt="Flask" />
-    <img src="https://img.shields.io/badge/Express-5.0-000000?logo=express&logoColor=white&style=for-the-badge" alt="Express" />
+    <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&style=for-the-badge" alt="PostgreSQL" />
     <img src="https://img.shields.io/badge/Pandas-2.0-150458?logo=pandas&logoColor=white&style=for-the-badge" alt="Pandas" />
-    <img src="https://img.shields.io/badge/Scikit--Learn-1.3-F7931E?logo=scikit-learn&logoColor=white&style=for-the-badge" alt="Scikit-Learn" />
+    <img src="https://img.shields.io/badge/Scikit--Learn-1.5-F7931E?logo=scikit-learn&logoColor=white&style=for-the-badge" alt="Scikit-Learn" />
   </p>
+
+  <h3><a href="https://ai-rockfall-prediction-system-phi.vercel.app"><b>Try the live app &rarr;</b></a></h3>
+
 </div>
 
 <br />
 
-**MineSafe** is a real-time Geotechnical Slope Stability Monitoring & Early Warning System designed for open-cast mining environments. It integrates real-time telemetry processing, machine learning-driven risk modeling, and physics-based stability engines to deliver instant warning alerts in critical safety environments where zero-latency execution and offline-first capabilities are essential.
+**MineSafe** is a real-time Geotechnical Slope Stability Monitoring & Early Warning System designed for open-cast mining environments. It integrates real-time telemetry processing, machine learning-driven risk modeling, and physics-based stability engines to deliver warning alerts in environments where a missed slope failure costs lives.
 
 ---
 
@@ -115,17 +118,18 @@ Here is the data structure utilized by our inference models and physics calculat
   - **Numerical Features**: Scaled via `StandardScaler` to handle multi-unit sensors.
   - **Categorical Features**: Encoded using `OneHotEncoder` to handle discrete geological rock classifications.
 
-### 2. Local Excel Database Persistence
-- **Offline Security**: Implements a local Excel-based ledger (`data/users.xlsx`) as a lightweight credential store. Passwords are encrypted on the backend using the secure `scrypt` hashing algorithm with custom salt protection before storage.
-- **Robust Serializer Handlers**: Implements custom pandas DataFrame-to-Dictionary translators to convert `NaN` float values to JSON-compatible `None`/`null` objects, preventing client-side parsing failures.
+### 2. PostgreSQL Persistence
+- **Credential Storage**: User accounts live in PostgreSQL. Passwords are hashed with `scrypt` and a per-user salt before storage, so the database never holds a recoverable password.
+- **Case-Insensitive Identity**: Email uniqueness is enforced by a database index on the lowercased address, which also prevents two simultaneous signups from racing past a look-then-insert check.
+- **Uploaded Datasets**: Files submitted through the platform are stored as rows rather than on disk, so they survive the restarts and redeploys that reset a hosted filesystem.
 
 ---
 
 ## 🏗️ Architectural Design & Implementation Details
 
 - **Asynchronous Telemetry Isolation**: React UI state rendering is decoupled from the asynchronous telemetry polling and ML inference cycles. This prevents backend network delays or transient API exceptions from degrading frontend responsiveness or triggering runtime crashes.
-- **Dual-Stack DNS Bypass**: Configured using explicit IPv4 loopback (`127.0.0.1`) addressing rather than the `localhost` hostname. This guarantees stable local networking and prevents cross-platform dual-stack DNS resolution lag common on Windows host systems.
-- **Portable Offline-First Ledger**: Employs a lightweight, file-based workbook ledger (`data/users.xlsx`) for system access credentials. This eliminates the database installation footprint in disconnected field setups while ensuring security through salted `scrypt` password hashing.
+- **Build-Time API Resolution**: The frontend resolves the inference service from `VITE_API_URL` at build time, falling back to the loopback address for local development. Hardcoding a host would point every visitor's browser at their own machine once the site is served from anywhere but the developer's laptop.
+- **Stateless Inference Service**: The Flask service holds no local state — accounts and uploads live in PostgreSQL, and the model pipelines are read-only. Any instance can therefore be restarted or replaced without losing data, which is what makes the service deployable on hosts that reset their filesystem between releases.
 - **Direct Client-Side Document Compiling**: Dynamically translates the DOM tree into high-fidelity PDF documents utilizing `html2canvas` and `jsPDF`. This reduces server-side processing overhead and eliminates the need for remote headless print servers.
 
 ---
@@ -173,6 +177,18 @@ npm run dev
 
 ## 🌐 Production Deployment
 
-The production build of the dashboard is deployed and accessible live at:
+The platform runs as two deployed services:
 
-👉 **[https://amishgarg1.github.io/AI-Rockfall-Prediction-System/](https://amishgarg1.github.io/AI-Rockfall-Prediction-System/)**
+👉 **[https://ai-rockfall-prediction-system-phi.vercel.app](https://ai-rockfall-prediction-system-phi.vercel.app)**
+
+| Component | Host | Role |
+| :--- | :--- | :--- |
+| **Frontend** | Vercel | React dashboard, telemetry views and the prediction console |
+| **Inference API** | Render | Flask service running the Random Forest pipelines and the LEM engine |
+| **Database** | Render PostgreSQL | User accounts and uploaded datasets |
+
+The inference API runs on a free instance that sleeps after inactivity, so the
+first request following an idle period takes around a minute to wake it. Loading
+the dashboard once beforehand makes everything after it immediate.
+
+Setup instructions for both services are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).

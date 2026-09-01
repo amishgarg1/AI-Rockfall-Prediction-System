@@ -31,3 +31,12 @@ backend/*.json
 .env.local
 .env.*.local
 
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Local Database
+*.sqlite
+*.sqlite3
+minesafe.sqlite

@@ -1,206 +1,697 @@
-/* AlertDetailsPage.css */
+/* ==========================================================================
+   Alert details
+   ========================================================================== */
 
 .alert-details-page {
-  padding: 1.5rem;
-  color: white;
-  flex-grow: 1;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8) var(--sp-12);
+  color: var(--text);
 }
+
+/* --- Header --------------------------------------------------------------- */
 
 .alert-details-header {
   display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--hairline);
+  animation: ms-fade-down var(--d-slow) var(--ease-out) backwards;
+}
+
+/* Header, the trigger banner, then the detail cards one after another. */
+.trigger-audit {
+  animation: ms-card-in var(--d-slow) var(--ease-out) 80ms backwards;
+}
+
+.details-grid > * {
+  animation: ms-card-in var(--d-slow) var(--ease-out) backwards;
+}
+
+.details-grid > *:nth-child(1) { animation-delay: 130ms; }
+.details-grid > *:nth-child(2) { animation-delay: 180ms; }
+.details-grid > *:nth-child(3) { animation-delay: 230ms; }
+.details-grid > *:nth-child(4) { animation-delay: 280ms; }
+.details-grid > *:nth-child(5) { animation-delay: 330ms; }
+
+.back-button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  margin-top: 4px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  color: var(--text-secondary);
+  transition: border-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out),
+              transform var(--d-fast) var(--ease-out);
+}
+
+.back-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.back-button:hover {
+  border-color: rgba(243, 156, 18, 0.45);
+  color: var(--accent-vivid);
+  transform: translateX(-2px);
+}
+
+.alert-details-heading {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.alert-details-tags {
+  display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #4a5568;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.alert-details-id {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--text-faint);
 }
 
 .alert-details-title {
   margin: 0;
-  font-size: 2.2rem;
-  color: #e0e0e0;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
-.back-button {
-  background: #3182ce;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  text-decoration: none;
-  display: inline-flex;
+.alert-details-description {
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+.alert-details-actions {
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
 }
 
-.back-button:hover {
-  background: #2563eb;
+.alert-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  max-width: 420px;
+  margin: var(--sp-12) auto;
+  padding: var(--sp-10) var(--sp-8);
+  text-align: center;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
 }
+
+.alert-not-found h1 {
+  font-size: var(--t-xl);
+}
+
+.alert-not-found p {
+  margin-bottom: var(--sp-2);
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Trigger audit — the headline fact of the incident
+   -------------------------------------------------------------------------- */
+
+.trigger-audit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-6);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--audit-border, var(--hairline));
+  background:
+    linear-gradient(140deg, var(--audit-tint, transparent) -20%, rgba(11, 11, 14, 0.9) 55%),
+    var(--surface-1);
+  box-shadow: var(--shadow-md), var(--inner-light);
+}
+
+.trigger-audit--high {
+  --audit-color: var(--risk-critical-vivid);
+  --audit-glow: var(--risk-critical-glow);
+  --audit-tint: var(--risk-critical-tint);
+  --audit-border: rgba(242, 44, 44, 0.3);
+}
+
+.trigger-audit--medium {
+  --audit-color: var(--risk-medium-vivid);
+  --audit-glow: var(--risk-medium-glow);
+  --audit-tint: var(--risk-medium-tint);
+  --audit-border: rgba(228, 239, 44, 0.28);
+}
+
+.trigger-audit--low {
+  --audit-color: var(--risk-low-vivid);
+  --audit-glow: var(--risk-low-glow);
+  --audit-tint: var(--risk-low-tint);
+  --audit-border: rgba(158, 220, 76, 0.28);
+}
+
+.trigger-audit-figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-10);
+}
+
+.trigger-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.trigger-figure-label {
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.trigger-figure-value {
+  font-size: var(--t-xl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.trigger-figure-value--muted {
+  color: var(--text-muted);
+}
+
+.trigger-figure-value--alarm {
+  color: var(--audit-color);
+  text-shadow: 0 0 20px var(--audit-glow);
+}
+
+/* --- Scale ---------------------------------------------------------------- */
+
+.trigger-scale-track {
+  position: relative;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.trigger-scale-fill {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), var(--audit-color));
+  box-shadow: 0 0 16px -3px var(--audit-glow);
+  transform-origin: left center;
+  animation: ms-bar-grow 900ms var(--ease-out) 150ms backwards;
+}
+
+.trigger-scale-limit {
+  position: absolute;
+  top: -5px;
+  width: 2px;
+  height: 18px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.trigger-scale-limit-label {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.trigger-audit-meta {
+  margin-top: var(--sp-3);
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Detail cards
+   -------------------------------------------------------------------------- */
 
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+  gap: var(--sp-5);
 }
 
 .detail-card {
-  background: #23232a;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.detail-card.large-card {
-  grid-column: 1 / -1; /* Span full width for larger cards */
-}
-
-/* New styles for interactive cards */
-.detail-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.48) 0%, rgba(11, 11, 14, 0.86) 100%);
+  box-shadow: var(--shadow-md), var(--inner-light);
+  transition: border-color var(--d-base) var(--ease-out),
+              box-shadow var(--d-slow) var(--ease-out);
 }
 
 .detail-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-color: var(--hairline-strong);
+  box-shadow: var(--shadow-lg), var(--inner-light);
 }
 
 .detail-card h3 {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  color: #63b3ed; /* A vibrant blue for titles */
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
+  gap: var(--sp-3);
+  font-size: var(--t-base);
+  font-weight: 640;
+  letter-spacing: -0.008em;
+  color: var(--text);
 }
 
 .card-icon {
-  font-size: 1.5rem;
-  color: #63b3ed; /* Match title color */
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--accent-vivid);
 }
 
-.card-content p {
-  margin-bottom: 0.6rem;
+.card-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.large-card {
+  grid-column: span 2;
+}
+
+/* --- Key/value rows ------------------------------------------------------- */
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.detail-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: 9px 0;
+  border-bottom: 1px solid var(--hairline-faint);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row dt {
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+.detail-row dd {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: 640;
+  text-align: right;
+  color: var(--text);
 }
 
 .highlight-value {
-  color: #90ee90; /* Light green for important values */
-  font-weight: bold;
+  color: var(--accent-vivid);
 }
 
 .threshold-value {
-  color: #ffcccb; /* Light red for thresholds */
-  font-weight: bold;
+  color: var(--text-secondary);
+}
+
+.mono-value {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs) !important;
+  color: var(--text-secondary) !important;
 }
 
 .text-muted {
-  color: #a0aec0; /* Lighter grey for less critical info */
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
 }
 
+.detail-subhead {
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* --- Assets --------------------------------------------------------------- */
+
 .assets-list {
-  list-style-type: none; /* Remove default bullets */
-  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--sp-2) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .assets-list li {
   display: flex;
   align-items: center;
-  margin-bottom: 0.4rem;
+  gap: var(--sp-3);
+  padding: 8px var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  font-size: var(--t-sm);
+  color: var(--text-secondary);
 }
 
 .asset-icon {
-  margin-right: 0.5rem;
-  color: #fc8181; /* Red for warning asset */
-  font-size: 1.1rem;
-}
-
-/* Specific styles for Recommendations and Audit Trail */
-.recommendations-card,
-.audit-trail-card {
-  background: #2a2a33; /* Slightly different background for these cards */
-  border: 1px solid #3a3a45;
-  transition: all 0.3s ease;
-}
-
-.recommendations-card:hover,
-.audit-trail-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-.checklist,
-.audit-list {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.checklist li,
-.audit-list li {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 0.6rem;
-  line-height: 1.5;
-}
-
-.checklist-icon {
-  margin-right: 0.7rem;
-  color: #48bb78; /* Green for checklist items */
-  font-size: 1.1rem;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--risk-high-vivid);
 }
 
-.audit-icon {
-  margin-right: 0.7rem;
-  color: #a0aec0; /* Grey for audit trail bullets */
-  font-size: 1.1rem;
-  flex-shrink: 0;
+.asset-icon svg {
+  width: 15px;
+  height: 15px;
 }
 
-.detail-card p,
-.detail-card ul,
-.detail-card li {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #c0c7d1;
-}
-
-.detail-card strong {
-  color: #edf2f7;
-  margin-right: 0.4rem;
-}
-
-.detail-card ul {
-  list-style-type: disc;
-  margin-left: 1.2rem;
-  padding-left: 0;
-}
-
-.detail-card li {
-  margin-bottom: 0.4rem;
-}
+/* --- Chart ---------------------------------------------------------------- */
 
 .chart-wrapper {
-  width: 100%;
-  height: 200px; /* Define a height for the chart container */
-  margin-bottom: 1rem;
-  border: 1px solid #4a5568;
-  border-radius: 8px;
-  background-color: #18181c;
+  margin: 0 calc(var(--sp-2) * -1);
+}
+
+.historical-peak {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  align-items: baseline;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--hairline-faint);
+  font-size: var(--t-sm);
+}
+
+.historical-peak strong {
+  font-size: var(--t-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-vivid);
+}
+
+/* --- Recommendations ------------------------------------------------------ */
+
+.sop-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
 }
 
 .sop-link {
-  color: #4299e1;
-  text-decoration: none;
+  font-size: var(--t-sm);
+  font-weight: 620;
 }
 
-.sop-link:hover {
+.checklist-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.checklist-progress {
+  font-size: var(--t-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checklist li label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 9px var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  cursor: pointer;
+  transition: border-color var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out);
+}
+
+.checklist li label:hover {
+  border-color: var(--hairline-strong);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+/* The native input stays in the accessibility tree and keeps keyboard and
+   screen-reader behaviour; the visible box is drawn beside it. */
+.checklist input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checklist-box {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--hairline-strong);
+  background: rgba(0, 0, 0, 0.35);
+  color: transparent;
+  transition: background-color var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out);
+}
+
+.checklist-box svg {
+  width: 11px;
+  height: 11px;
+}
+
+.checklist input:focus-visible + .checklist-box {
+  outline: 2px solid var(--accent-vivid);
+  outline-offset: 2px;
+}
+
+.checklist li.is-done .checklist-box {
+  border-color: rgba(158, 220, 76, 0.5);
+  background: var(--risk-low-tint);
+  color: var(--risk-low-vivid);
+}
+
+.checklist-text {
+  font-size: var(--t-sm);
+  color: var(--text-secondary);
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.checklist li.is-done .checklist-text {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.escalation-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(242, 44, 44, 0.24);
+  background: var(--risk-critical-tint);
+}
+
+.escalation-name {
+  font-size: var(--t-sm);
+  font-weight: 640;
+  color: var(--text);
+}
+
+.escalation-phone {
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  color: var(--risk-critical-vivid);
+}
+
+.escalation-phone:hover {
   text-decoration: underline;
+}
+
+/* --- Audit timeline ------------------------------------------------------- */
+
+.audit-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audit-list li {
+  position: relative;
+  display: flex;
+  gap: var(--sp-4);
+  padding: 0 0 var(--sp-4) var(--sp-5);
+}
+
+.audit-list li:last-child {
+  padding-bottom: 0;
+}
+
+/* The spine connecting the events. Stops at the last node rather than running
+   off the end of the list. */
+.audit-list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  bottom: 0;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+
+.audit-list li:last-child::before {
+  display: none;
+}
+
+.audit-icon {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-1);
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.audit-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.audit-stamp {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-faint);
+}
+
+.audit-text {
+  font-size: var(--t-sm);
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .alert-details-page {
+    padding: var(--sp-5) var(--sp-5) var(--sp-10);
+  }
+
+  .large-card {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 720px) {
+  .alert-details-page {
+    padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  }
+
+  .alert-details-title {
+    font-size: var(--t-xl);
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trigger-audit {
+    padding: var(--sp-4);
+  }
+
+  .trigger-audit-figures {
+    gap: var(--sp-5);
+  }
+
+  .alert-details-actions {
+    width: 100%;
+  }
+}
+
+/* Printing an incident is a real workflow here (the Export button calls
+   window.print), so the page has to survive being put on paper. */
+@media print {
+  .alert-details-page {
+    padding: 0;
+    color: #000;
+  }
+
+  .back-button,
+  .alert-details-actions {
+    display: none;
+  }
+
+  .detail-card,
+  .trigger-audit {
+    border-color: #ccc;
+    background: none;
+    box-shadow: none;
+    break-inside: avoid;
+  }
 }

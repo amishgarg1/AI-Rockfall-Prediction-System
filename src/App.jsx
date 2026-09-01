@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Sensors from './components/Sensors';
@@ -6,12 +6,44 @@ import SensoringPage from './components/SensoringPage';
 import AlertsPage from './components/AlertsPage';
 import LoginPage from './components/LoginPage'; // Import LoginPage
 import SignupPage from './components/SignupPage'; // Removed SignupPage import
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 // import { signOut } from 'firebase/auth'; // Removed
 // import { auth } from './firebase'; // Removed
 import './App.css';
 import PredictionPage from './components/PredictionPage';
 import AlertDetailsPage from './components/AlertDetailsPage'; // Import new component
+
+/* Holds the outgoing route on screen long enough to play its exit, then swaps
+   in the new one. React Router replaces the tree the instant the URL changes,
+   so without this the old page vanishes mid-frame and the new one appears
+   fully formed — the abrupt swap this is here to remove.
+
+   Returns the location the router should actually render (which lags the real
+   one during the exit) plus the stage driving the CSS animation. */
+const PAGE_OUT_MS = 260;
+
+const usePageTransition = () => {
+  const location = useLocation();
+  const [rendered, setRendered] = useState(location);
+  const [stage, setStage] = useState('in');
+  const timer = useRef(null);
+
+  useEffect(() => {
+    // Same page (a query or hash change): nothing to animate.
+    if (location.pathname === rendered.pathname) return undefined;
+
+    setStage('out');
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      setRendered(location);
+      setStage('in');
+    }, PAGE_OUT_MS);
+
+    return () => clearTimeout(timer.current);
+  }, [location, rendered.pathname]);
+
+  return { rendered, stage };
+};
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -21,6 +53,17 @@ function App() {
   const [signupMessage, setSignupMessage] = useState(null); // New state for signup success message
 
   const navigate = useNavigate();
+  const { rendered, stage } = usePageTransition();
+  const scrollerRef = useRef(null);
+
+  /* A new route starts at the top. Without this the content column keeps the
+     previous page's scroll offset, so a short page can arrive already scrolled
+     past its own header. Jumps at the point the old page is fully faded, so
+     the reset is never visible. */
+  useEffect(() => {
+    if (stage !== 'in' || !scrollerRef.current) return;
+    scrollerRef.current.scrollTo({ top: 0, behavior: 'auto' });
+  }, [stage, rendered.pathname]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -75,12 +118,21 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* Backdrop layers: drifting glows and a faint technical grid. Purely
+          decorative, so they sit outside the content wrapper and take no
+          pointer events. */}
+      <div className="app-ambient" aria-hidden="true" />
+      <div className="app-grid" aria-hidden="true" />
       <div className={`app-content-wrapper ${(showLoginPage || showSignupPage) ? 'blurred-and-disabled' : ''}`}> {/* Apply blur to wrapper */}
         <div className={`sidebar-container ${isSidebarOpen ? 'open' : 'closed'}`}>
           <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} isLoggedIn={isLoggedIn} />
         </div>
-        <div className={`main-content-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-          <Routes>
+        <div className={`main-content-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`} ref={scrollerRef}>
+          {/* Keyed on the path so React tears down and rebuilds the subtree per
+              route — that is what makes each page replay its own entrance
+              animations instead of reusing the previous page's settled DOM. */}
+          <div className={`page-transition page-transition--${stage}`} key={rendered.pathname}>
+          <Routes location={rendered}>
             <Route path="/" element={<Dashboard
               isLoggedIn={isLoggedIn}
               handleLoginClick={handleLoginClick}
@@ -96,12 +148,14 @@ function App() {
             <Route path="/alerts/:id" element={<AlertDetailsPage />} /> {/* New route for alert details */}
             <Route path="/prediction" element={<PredictionPage />} />
           </Routes>
+          </div>
         </div>
       </div>
       {showLoginPage && (
         <LoginPage
           onLoginSuccess={handleLoginSuccess}
           onClose={handleCloseLoginPage}
+          onSwitchToSignup={handleSignupClick}
         />
       )}
       {showSignupPage && (
@@ -110,6 +164,9 @@ function App() {
           onClose={handleCloseSignupPage}
         />
       )}
+      {/* Film grain over the whole frame. Breaks up the banding that large
+          flat dark gradients produce on 8-bit displays. */}
+      <div className="ms-grain" aria-hidden="true" />
     </div>
   );
 }

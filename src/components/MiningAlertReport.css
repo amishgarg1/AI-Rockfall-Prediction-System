@@ -1,84 +1,148 @@
+/* ==========================================================================
+   Mining alert report
+   Every rule is scoped under .mining-alert-report. The previous version
+   declared .section and .chart-container globally — the same .chart-container
+   the sensors page uses for its recharts panel — so importing this component
+   anywhere would have repainted that panel white.
+   ========================================================================== */
+
 .mining-alert-report {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+  font-family: var(--font-sans);
+  color: var(--text);
 }
 
 .mining-alert-report h1 {
-  color: #333;
-  margin-bottom: 20px;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
 }
 
-.section {
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.mining-alert-report .section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.48) 0%, rgba(11, 11, 14, 0.86) 100%);
+  box-shadow: var(--shadow-md), var(--inner-light);
 }
 
-.section h2 {
-  color: #0056b3;
-  margin-top: 0;
-  margin-bottom: 15px;
+.mining-alert-report .section h2,
+.mining-alert-report .section h3 {
+  font-size: var(--t-lg);
+  font-weight: 640;
+  letter-spacing: -0.012em;
+  color: var(--text);
 }
 
-.section h3 {
-  color: #0056b3;
-  margin-top: 0;
-  margin-bottom: 15px;
+/* --- Key metrics ---------------------------------------------------------- */
+
+.mining-alert-report .key-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: var(--sp-3);
 }
 
-.key-metrics,
-.alert-log table,
-.alert-analytics-charts {
-  margin-top: 15px;
+.mining-alert-report .key-metrics p {
+  margin: 0;
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
 }
 
-.key-metrics p {
-  margin: 5px 0;
+/* --- Alert log table ------------------------------------------------------ */
+
+.mining-alert-report .alert-log {
+  overflow-x: auto;
 }
 
-.alert-log table {
+.mining-alert-report .alert-log table {
   width: 100%;
   border-collapse: collapse;
+  font-size: var(--t-sm);
 }
 
-.alert-log th,
-.alert-log td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.mining-alert-report .alert-log th,
+.mining-alert-report .alert-log td {
+  padding: 10px var(--sp-3);
+  border-bottom: 1px solid var(--hairline);
   text-align: left;
 }
 
-.alert-log th {
-  background-color: #e2e6ea;
+.mining-alert-report .alert-log th {
+  background: var(--panel-sunken);
+  font-size: var(--t-eyebrow);
+  font-weight: 620;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.alert-analytics-charts {
+.mining-alert-report .alert-log td {
+  color: var(--text-secondary);
+}
+
+.mining-alert-report .alert-log tr:last-child td {
+  border-bottom: none;
+}
+
+.mining-alert-report .alert-log tbody tr {
+  transition: background-color var(--d-fast) var(--ease-out);
+}
+
+.mining-alert-report .alert-log tbody tr:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* --- Charts --------------------------------------------------------------- */
+
+.mining-alert-report .alert-analytics-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--sp-4);
+}
+
+.mining-alert-report .chart-container {
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  box-shadow: none;
+}
+
+/* --- Corrective actions --------------------------------------------------- */
+
+.mining-alert-report .corrective-actions ul {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.chart-container {
-  flex: 1 1 calc(50% - 20px);
-  min-width: 300px;
-  background-color: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.corrective-actions ul {
-  list-style: none;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
   padding: 0;
+  list-style: none;
 }
 
-.corrective-actions li {
-  background-color: #fff;
-  border-left: 5px solid #0056b3;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+.mining-alert-report .corrective-actions li {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent);
+  background: var(--panel-sunken);
+  font-size: var(--t-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 720px) {
+  .mining-alert-report {
+    padding: var(--sp-4);
+  }
 }

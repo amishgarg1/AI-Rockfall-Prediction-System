@@ -1,135 +1,263 @@
-.mine-overview-container {
-  background-color: transparent;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  color: white;
-  margin-left: -20px;
+/* ==========================================================================
+   Mine overview — site header plus the sensor channel grid
+   ========================================================================== */
 
+.mine-overview-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
 }
+
+/* --- Site header ---------------------------------------------------------- */
 
 .mine-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(150deg, rgba(52, 53, 61, 0.5), rgba(12, 12, 15, 0.85));
+  box-shadow: var(--shadow-md), var(--inner-light);
 }
 
 .mine-info h2 {
-  margin: 0 0 5px 0;
-  font-size: 1.5em;
-  color: #ffffff;
+  font-size: var(--t-xl);
+  font-weight: 680;
+  letter-spacing: -0.025em;
+  color: var(--text);
 }
 
-.mine-info p {
-  margin: 0;
-  font-size: 0.9em;
-  color: #a0aec0;
+.mine-location {
+  margin-top: 4px;
+  font-size: var(--t-sm);
+  color: var(--text-secondary);
+}
+
+.mine-coordinates {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--text-faint);
 }
 
 .mine-status {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 5px;
+  gap: 6px;
 }
 
 .status-badge {
-  background-color: #48bb78;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
-  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 5px 12px 5px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(158, 220, 76, 0.3);
+  background: var(--risk-low-tint);
+  color: var(--risk-low-vivid);
+  font-size: var(--t-xs);
+  font-weight: 660;
 }
 
-.last-inspection {
-  font-size: 0.8em;
-  color: #a0aec0;
+.status-badge--alert {
+  border-color: rgba(242, 44, 44, 0.34);
+  background: var(--risk-critical-tint);
+  color: var(--risk-critical-vivid);
 }
+
+.last-inspection,
+.breach-summary {
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+}
+
+.breach-summary {
+  color: var(--text-faint);
+}
+
+/* --- Sensor grid ---------------------------------------------------------- */
 
 .sensor-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: var(--sp-4);
 }
 
 .sensor-card {
-  background-color: #2d3748;
-  border-radius: 8px;
-  padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--channel-border, var(--hairline));
+  background: linear-gradient(160deg, rgba(46, 48, 55, 0.5), rgba(10, 10, 13, 0.85));
+  box-shadow: var(--shadow-sm), var(--inner-light);
+  transition: transform var(--d-slow) var(--ease-out),
+              border-color var(--d-slow) var(--ease-out),
+              box-shadow var(--d-slow) var(--ease-out);
 }
 
-.sensor-card.error {
-  border-left: 5px solid #e53e3e;
+.sensor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md), var(--inner-light), 0 0 26px -14px var(--channel-glow);
+}
+
+/* Status drives every colour on the card — border, icon tint, meter fill and
+   the value itself — so a breaching channel is unmistakable at a glance. */
+.sensor-card.success {
+  --channel-color: var(--risk-low-vivid);
+  --channel-glow: var(--risk-low-glow);
+  --channel-tint: var(--risk-low-tint);
+  --channel-border: rgba(158, 220, 76, 0.2);
 }
 
 .sensor-card.warning {
-  border-left: 5px solid #dd6b20;
+  --channel-color: var(--risk-high-vivid);
+  --channel-glow: var(--risk-high-glow);
+  --channel-tint: var(--risk-high-tint);
+  --channel-border: rgba(255, 128, 56, 0.28);
 }
 
-.sensor-card.success {
-  border-left: 5px solid #48bb78;
+.sensor-card.error {
+  --channel-color: var(--risk-critical-vivid);
+  --channel-glow: var(--risk-critical-glow);
+  --channel-tint: var(--risk-critical-tint);
+  --channel-border: rgba(242, 44, 44, 0.34);
 }
 
 .sensor-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--sp-3);
 }
 
 .sensor-icon {
-  font-size: 1.2em;
-  color: #a0aec0;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--channel-border, var(--hairline));
+  background: var(--channel-tint, rgba(255, 255, 255, 0.05));
+  color: var(--channel-color, var(--text-secondary));
+}
+
+.sensor-icon svg {
+  width: 17px;
+  height: 17px;
 }
 
 .sensor-name {
-  margin: 0;
-  font-size: 1em;
-  color: #ffffff;
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--t-sm);
+  font-weight: 620;
+  color: var(--text-secondary);
 }
 
 .status-icon {
-  font-size: 1em;
-  font-weight: bold;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--channel-tint);
+  color: var(--channel-color);
 }
 
-.status-icon.success {
-  color: #48bb78;
+.status-icon svg {
+  width: 11px;
+  height: 11px;
 }
 
-.status-icon.warning {
-  color: #dd6b20;
+/* An error state is the one thing on the page allowed to move on its own. */
+.sensor-card.error .status-icon {
+  animation: ms-breathe 1.8s var(--ease-in-out) infinite;
 }
 
-.status-icon.error {
-  color: #e53e3e;
+.sensor-details {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
 }
 
-.sensor-details .sensor-value {
-  margin: 0;
-  font-size: 1.5em;
-  font-weight: bold;
+.sensor-value {
+  font-size: var(--t-xl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--channel-color, var(--text));
+  text-shadow: 0 0 20px var(--channel-glow);
 }
 
-.sensor-card.error .sensor-value {
-  color: #e53e3e;
+.sensor-threshold {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
-.sensor-card.warning .sensor-value {
-  color: #dd6b20;
+/* --- Threshold meter ------------------------------------------------------ */
+
+.sensor-meter-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: auto;
 }
 
-.sensor-card.success .sensor-value {
-  color: #48bb78;
+.sensor-meter {
+  position: relative;
+  height: 5px;
+  overflow: visible;
+  border-radius: var(--r-pill);
 }
 
-.sensor-details .sensor-threshold {
-  margin: 0;
-  font-size: 0.8em;
-  color: #a0aec0;
+.sensor-meter-fill {
+  --meter-from: var(--channel-color);
+  --meter-to: var(--channel-color);
+  box-shadow: 0 0 10px -2px var(--channel-glow);
+  animation: ms-bar-grow 900ms var(--ease-out) 200ms backwards;
+  transform-origin: left center;
+}
+
+/* The tick sits at 100% of the bar, which is the threshold itself. A fill
+   that reaches it has hit the limit. */
+.sensor-meter-limit {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  width: 2px;
+  height: 11px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.sensor-meter-label {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.sensor-over {
+  font-weight: 700;
+  color: var(--risk-critical-vivid);
+}
+
+@media (max-width: 720px) {
+  .mine-header {
+    flex-direction: column;
+    padding: var(--sp-4);
+  }
+
+  .mine-status {
+    align-items: flex-start;
+  }
 }

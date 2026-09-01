@@ -1,66 +1,961 @@
+/* ==========================================================================
+   MineSafe — design foundation
+   Tokens, motion vocabulary and shared primitives for the whole platform.
+   The palette is the one the product already shipped with: the charcoal
+   (#414147) to black gradient, the amber signal colour, and the four risk
+   colours from the status cards. Nothing here introduces a new hue, it only
+   gives the existing ones tints, vivid variants and glows so every surface
+   can be built from one set instead of re-declaring gradients inline.
+   ========================================================================== */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* --- Base surfaces -----------------------------------------------------
+     Derived from the charcoal end of the app gradient, stepped down toward
+     black. Higher number = closer to the viewer. */
+  --void: #000000;
+  --surface-0: #0b0b0d;
+  --surface-1: #131418;
+  --surface-2: #1b1c21;
+  --surface-3: #24252b;
+  --surface-4: #2e3037;
+  --charcoal: #414147;
+
+  /* Panels are translucent so the ambient background glows read through. */
+  --panel: rgba(30, 31, 37, 0.72);
+  --panel-solid: #1e1f25;
+  --panel-raised: rgba(42, 44, 51, 0.78);
+  --panel-sunken: rgba(11, 11, 13, 0.55);
+
+  --hairline: rgba(255, 255, 255, 0.07);
+  --hairline-strong: rgba(255, 255, 255, 0.12);
+  --hairline-faint: rgba(255, 255, 255, 0.04);
+  --inner-light: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* --- Text -------------------------------------------------------------- */
+  --text: #f3f5f8;
+  --text-secondary: #c0c7d1;
+  --text-muted: #8d94a1;
+  --text-faint: rgba(255, 255, 255, 0.34);
+
+  /* --- Signal / accent --------------------------------------------------- */
+  --accent: #f39c12;
+  --accent-vivid: #ffb43d;
+  --accent-deep: #b8730a;
+  --accent-tint: rgba(243, 156, 18, 0.14);
+  --accent-tint-strong: rgba(243, 156, 18, 0.26);
+  --accent-glow: rgba(243, 156, 18, 0.45);
+
+  /* --- Risk scale --------------------------------------------------------
+     The exact four hues from the original status cards, plus a vivid variant
+     for text and strokes (the base reds are too dark to read on black) and a
+     low-alpha tint for fills. */
+  --risk-critical: #b80d0d;
+  --risk-critical-vivid: #f22c2c;
+  --risk-critical-tint: rgba(184, 13, 13, 0.16);
+  --risk-critical-glow: rgba(184, 13, 13, 0.5);
+
+  --risk-high: #ff5900;
+  --risk-high-vivid: #ff8038;
+  --risk-high-tint: rgba(255, 89, 0, 0.14);
+  --risk-high-glow: rgba(255, 89, 0, 0.42);
+
+  --risk-medium: #ced904;
+  --risk-medium-vivid: #e4ef2c;
+  --risk-medium-tint: rgba(206, 217, 4, 0.13);
+  --risk-medium-glow: rgba(206, 217, 4, 0.36);
+
+  --risk-low: #7fc22d;
+  --risk-low-vivid: #9edc4c;
+  --risk-low-tint: rgba(127, 194, 45, 0.14);
+  --risk-low-glow: rgba(127, 194, 45, 0.38);
+
+  /* Semantic aliases so components read by meaning, not by colour. */
+  --danger: var(--risk-critical-vivid);
+  --warning: var(--risk-high-vivid);
+  --caution: var(--risk-medium-vivid);
+  --success: var(--risk-low-vivid);
+  --info: #6aa9d8;
+  --info-tint: rgba(106, 169, 216, 0.14);
+
+  /* --- Radii ------------------------------------------------------------- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  /* --- Elevation ---------------------------------------------------------
+     Layered rather than single-blur: a tight contact shadow plus a wide soft
+     one is what separates a panel that sits on the page from a flat box. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px -2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4), 0 8px 24px -6px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.45), 0 18px 48px -12px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.5), 0 32px 80px -16px rgba(0, 0, 0, 0.7);
+
+  /* --- Spacing rhythm ---------------------------------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* --- Type scale -------------------------------------------------------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+
+  --t-eyebrow: 0.6875rem;   /* 11px — uppercase labels */
+  --t-xs: 0.75rem;          /* 12px */
+  --t-sm: 0.8125rem;        /* 13px */
+  --t-base: 0.9375rem;      /* 15px */
+  --t-lg: 1.0625rem;        /* 17px */
+  --t-xl: 1.375rem;         /* 22px */
+  --t-2xl: 1.75rem;         /* 28px */
+  --t-3xl: 2.25rem;         /* 36px */
+  --t-4xl: 3rem;            /* 48px */
+
+  /* --- Motion ------------------------------------------------------------
+     The scale and curves used on the Numerate platform, carried over so the
+     two products move the same way.
+
+     Numerate leans on a small set of short durations — 300ms does most of the
+     work, 200ms for colour changes on navigation, 150/100ms for anything that
+     should feel immediate, 500ms for larger arrivals — with ease-out rather
+     than a long-tailed curve. The result is quick and light rather than
+     drawn out. */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);        /* the default for state changes */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);     /* symmetric, for toggles */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);         /* things leaving */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot: panels, icon pops */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);  /* long slides */
+  --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1); /* card arrivals */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --d-instant: 100ms;
+  --d-fast: 150ms;
+  --d-base: 200ms;
+  --d-slow: 300ms;
+  --d-slower: 500ms;
+
+  /* Panels grow out of their trigger and shrink back faster than they opened,
+     so dismissing feels immediate. Numerate's dock-panel timing. */
+  --d-panel-in: 300ms;
+  --d-panel-out: 170ms;
+
+  /* Route changes use the same pairing. */
+  --d-page-out: 170ms;
+  --d-page-in: 300ms;
+
+  --sidebar-w: 280px;
+  --sidebar-w-collapsed: 76px;
+
+  /* One duration and one curve for everything the rail toggle moves — width,
+     padding, label max-width and margin — so they all land on the same frame
+     instead of arriving separately. */
+  --d-rail: 380ms;
+  --ease-rail: cubic-bezier(0.4, 0, 0.2, 1);
+
+  color-scheme: dark;
+  font-family: var(--font-sans);
   line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: transparent;
-  text-decoration: inherit;
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  color: var(--text);
+  font-size: var(--t-base);
+  background-color: var(--void);
+  overflow: hidden;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--d-fast) var(--ease-out);
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  background: none;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Numbers in a monitoring UI must not jitter as they tick. */
+.tabular,
+.metric-value,
+.card-value,
+.stat-value {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ==========================================================================
+   Focus — visible for keyboards, invisible for mice
+   ========================================================================== */
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-vivid);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+::selection {
+  background: var(--accent-tint-strong);
+  color: var(--text);
+}
+
+/* ==========================================================================
+   Scrollbars — hidden, scrolling intact
+   The bars are taken out of the picture while every scroll container keeps its
+   overflow, so wheel, trackpad, touch, keyboard (arrows / Page keys / Home /
+   End) and programmatic scrolling all behave exactly as before. Nothing here
+   touches overflow — only the painting of the bar itself.
+   ========================================================================== */
+
+* {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* legacy Edge / IE */
+}
+
+*::-webkit-scrollbar {
+  display: none;                /* Chromium / WebKit */
+  width: 0;
+  height: 0;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ==========================================================================
+   Motion library
+   Shared keyframes so components animate from one vocabulary instead of each
+   inventing its own timing.
+   ========================================================================== */
+
+@keyframes ms-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ms-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Numerate's authFadeUp — a 22px rise, further than the usual 8-12px, which
+   is what makes its entrances read as deliberate rather than incidental. */
+@keyframes ms-fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ms-fade-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ms-slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Based on Numerate's wsCardIn, minus the scale. Opacity still finishes at 60%
+   of the way through while the movement carries on, so the card is fully
+   visible before it stops travelling — that is what stops a staggered grid
+   feeling like a slideshow.
+
+   The 0.97 scale it started from is dropped deliberately: on a small tile it
+   passes unnoticed, but on a 440px card three percent is thirteen pixels of
+   visible resizing, and a card that changes size while arriving reads as a
+   rendering glitch rather than as motion. Travel alone carries the entrance. */
+@keyframes ms-card-in {
+  0%   { opacity: 0; transform: translateY(18px); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* wsIconPop — overshoots to 1.12 before settling. */
+@keyframes ms-pop-in {
+  0%   { opacity: 0; transform: scale(0.5); }
+  70%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* dockPanelIn/Out. A panel scales up out of the control that opened it, with
+   a slight overshoot past 1.0 — that bounce is what separates "grew out of
+   the button" from "faded in". Closing does not overshoot: it accelerates
+   away and shrinks back toward the trigger. */
+@keyframes ms-modal-in {
+  from { opacity: 0; transform: scale(0.82) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes ms-modal-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(0.9) translateY(-4px); }
+}
+
+/* The counterpart to ms-card-in, for a card leaving a list. Shorter, and it
+   sinks back the way it came rather than continuing on. */
+@keyframes ms-card-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(10px); }
+}
+
+/* authSlideInRight, for anything entering from the side. */
+@keyframes ms-slide-in-right {
+  from { opacity: 0; transform: translateX(48px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* wsGlowSweep — a highlight travelling across a surface once. */
+@keyframes ms-glow-sweep {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
+/* An expanding ring — the standard "this is live" tell on status dots. */
+@keyframes ms-pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  70%  { transform: scale(2.6); opacity: 0; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes ms-breathe {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+@keyframes ms-glow-pulse {
+  0%, 100% { box-shadow: 0 0 14px -2px var(--glow-color, var(--accent-glow)); }
+  50%      { box-shadow: 0 0 30px 2px var(--glow-color, var(--accent-glow)); }
+}
+
+/* A light travelling across a surface — used on loading bars and on the
+   leading edge of a value that just changed. */
+@keyframes ms-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes ms-sweep {
+  0%   { transform: translateX(-130%); }
+  100% { transform: translateX(230%); }
+}
+
+/* The telemetry scan line: a slow vertical pass over live data panels. */
+@keyframes ms-scan {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateY(1200%); opacity: 0; }
+}
+
+@keyframes ms-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* wsFloat */
+@keyframes ms-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+/* wsBlob1 / wsBlob2 — the ambient background drift. Two curves on different
+   periods so the overlapping glows never sync up. */
+@keyframes ms-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(40px, -30px) scale(1.15); }
+}
+
+@keyframes ms-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-30px, 30px) scale(1.1); }
+}
+
+@keyframes ms-draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes ms-bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes ms-alert-flash {
+  0%, 100% { background-color: transparent; }
+  50%      { background-color: var(--risk-critical-tint); }
+}
+
+/* Route changes, built from the same fade-and-rise the platform uses for
+   content arriving. No blur: it is expensive to composite over a full page
+   and is not part of this motion vocabulary. */
+@keyframes ms-page-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes ms-page-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Shared primitives
+   ========================================================================== */
+
+/* --- Panel: the base container every widget sits in ---------------------- */
+.ms-panel {
+  position: relative;
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.62) 0%, rgba(13, 13, 16, 0.82) 100%);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md), var(--inner-light);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  transition: border-color var(--d-base) var(--ease-out),
+              box-shadow var(--d-base) var(--ease-out),
+              transform var(--d-base) var(--ease-out);
+}
+
+/* A one-pixel gradient seam along the top edge: catches light like a real
+   bevel and is what stops large dark panels reading as flat rectangles. */
+.ms-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18) 20%,
+    rgba(255, 255, 255, 0.18) 80%,
+    transparent);
+  pointer-events: none;
+}
+
+.ms-panel--interactive:hover {
+  border-color: var(--hairline-strong);
+  box-shadow: var(--shadow-lg), var(--inner-light);
+  transform: translateY(-2px);
+}
+
+.ms-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+}
+
+.ms-panel-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--t-lg);
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+.ms-panel-body {
+  padding: 0 var(--sp-5) var(--sp-5);
+}
+
+.ms-eyebrow {
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.ms-divider {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(90deg, transparent, var(--hairline) 15%, var(--hairline) 85%, transparent);
+}
+
+/* --- Live indicator ------------------------------------------------------ */
+.ms-live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 5px 11px 5px 9px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--panel-sunken);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.ms-dot {
+  position: relative;
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--success));
+}
+
+.ms-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: ms-pulse-ring 2.4s var(--ease-out) infinite;
+}
+
+.ms-dot--critical { --dot-color: var(--risk-critical-vivid); }
+.ms-dot--high     { --dot-color: var(--risk-high-vivid); }
+.ms-dot--medium   { --dot-color: var(--risk-medium-vivid); }
+.ms-dot--low      { --dot-color: var(--risk-low-vivid); }
+.ms-dot--idle     { --dot-color: var(--text-muted); }
+.ms-dot--idle::after { animation: none; }
+
+/* --- Severity chips ------------------------------------------------------ */
+.ms-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--chip-border, var(--hairline));
+  background: var(--chip-bg, var(--panel-sunken));
+  color: var(--chip-fg, var(--text-secondary));
+  font-size: var(--t-xs);
+  font-weight: 640;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.ms-chip--critical {
+  --chip-bg: var(--risk-critical-tint);
+  --chip-fg: var(--risk-critical-vivid);
+  --chip-border: rgba(242, 44, 44, 0.32);
+}
+
+.ms-chip--high {
+  --chip-bg: var(--risk-high-tint);
+  --chip-fg: var(--risk-high-vivid);
+  --chip-border: rgba(255, 128, 56, 0.3);
+}
+
+.ms-chip--medium {
+  --chip-bg: var(--risk-medium-tint);
+  --chip-fg: var(--risk-medium-vivid);
+  --chip-border: rgba(228, 239, 44, 0.28);
+}
+
+.ms-chip--low {
+  --chip-bg: var(--risk-low-tint);
+  --chip-fg: var(--risk-low-vivid);
+  --chip-border: rgba(158, 220, 76, 0.28);
+}
+
+.ms-chip--accent {
+  --chip-bg: var(--accent-tint);
+  --chip-fg: var(--accent-vivid);
+  --chip-border: rgba(243, 156, 18, 0.3);
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+.ms-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 9px 18px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: transform var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out),
+              box-shadow var(--d-fast) var(--ease-out);
+}
+
+/* Light sweeps across the face on hover. */
+.ms-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+
+.ms-btn:hover::after {
+  animation: ms-sweep 700ms var(--ease-out);
+}
+
+.ms-btn:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.ms-btn:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.ms-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ms-btn--primary {
+  border-color: rgba(243, 156, 18, 0.42);
+  background: linear-gradient(180deg, var(--accent-vivid), var(--accent-deep));
+  color: #1a1205;
+  font-weight: 680;
+  box-shadow: 0 4px 16px -4px var(--accent-glow);
+}
+
+.ms-btn--primary:hover {
+  border-color: rgba(243, 156, 18, 0.6);
+  box-shadow: 0 6px 24px -4px var(--accent-glow);
+}
+
+.ms-btn--danger {
+  border-color: rgba(242, 44, 44, 0.4);
+  background: linear-gradient(180deg, rgba(242, 44, 44, 0.24), rgba(184, 13, 13, 0.32));
+  color: #ffd9d9;
+}
+
+.ms-btn--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.ms-btn--ghost:hover {
+  border-color: var(--hairline);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.ms-btn--sm {
+  padding: 6px 12px;
+  font-size: var(--t-xs);
+}
+
+/* --- Form fields --------------------------------------------------------- */
+.ms-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ms-label {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.ms-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  color: var(--text);
+  font-size: var(--t-sm);
+  transition: border-color var(--d-fast) var(--ease-out),
+              box-shadow var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out);
+}
+
+.ms-input::placeholder {
+  color: var(--text-faint);
+}
+
+.ms-input:hover {
+  border-color: var(--hairline-strong);
+}
+
+.ms-input:focus {
+  border-color: rgba(243, 156, 18, 0.55);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+/* --- Meters -------------------------------------------------------------- */
+.ms-meter {
+  position: relative;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.ms-meter-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--meter-from, var(--accent)), var(--meter-to, var(--accent-vivid)));
+  transform-origin: left center;
+  transition: width var(--d-slower) var(--ease-out);
+}
+
+/* --- Loading skeleton ---------------------------------------------------- */
+.ms-skeleton {
+  border-radius: var(--r-sm);
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: ms-shimmer 1.5s linear infinite;
+}
+
+/* --- Scan line ----------------------------------------------------------- */
+.ms-scanline {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: ms-scan 7s linear infinite;
+}
+
+/* --- Grain --------------------------------------------------------------- */
+.ms-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.035;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Page transition ------------------------------------------------------
+   Applied by App.jsx around the router outlet.
+   -------------------------------------------------------------------------- */
+
+.page-transition {
+  min-height: 100%;
+  will-change: opacity, transform, filter;
+}
+
+.page-transition--in {
+  animation: ms-page-in var(--d-page-in) var(--ease-out) both;
+}
+
+.page-transition--out {
+  animation: ms-page-out var(--d-page-out) var(--ease-in) both;
+  pointer-events: none;
+}
+
+/* --- Entrance utilities, matching the platform's named animations --------- */
+
+.ms-fade-up    { opacity: 0; animation: ms-fade-up 0.7s var(--ease-out) forwards; }
+.ms-slide-right { opacity: 0; animation: ms-slide-in-right 0.8s var(--ease-smooth) forwards; }
+.ms-icon-pop   { opacity: 0; animation: ms-pop-in 0.5s var(--ease-spring) forwards; }
+
+/* --- Entrance helpers ------------------------------------------------------
+   Elements inside a page start after the page itself has begun arriving, so
+   the sequence reads as one movement rather than several competing ones.
+   -------------------------------------------------------------------------- */
+
+/* 0.7s for a rise, 0.55s for a card — the platform's two entrance timings. */
+.ms-enter      { opacity: 0; animation: ms-fade-up 0.7s var(--ease-out) forwards; }
+.ms-enter-card { opacity: 0; animation: ms-card-in 0.55s var(--ease-entrance) forwards; }
+
+/* Stagger steps stay tight so a grid resolves quickly rather than dealing
+   itself out one card at a time. */
+.ms-stagger-1  { animation-delay: 50ms; }
+.ms-stagger-2  { animation-delay: 100ms; }
+.ms-stagger-3  { animation-delay: 150ms; }
+.ms-stagger-4  { animation-delay: 200ms; }
+.ms-stagger-5  { animation-delay: 250ms; }
+.ms-stagger-6  { animation-delay: 300ms; }
+.ms-stagger-7  { animation-delay: 350ms; }
+.ms-stagger-8  { animation-delay: 400ms; }
+
+/* --------------------------------------------------------------------------
+   Baseline interaction smoothing
+   A floor, not a replacement: any component that declares its own transition
+   still wins. This only catches controls that would otherwise change state
+   with no transition at all.
+   -------------------------------------------------------------------------- */
+
+/* Colour first. The platform reaches for transition-colors far more than
+   anything else — most interactions are a tint or a border shifting, not a
+   thing moving — with movement added only where it means something. */
+a,
+button,
+input,
+select,
+textarea,
+summary,
+[role="button"],
+[tabindex] {
+  transition: color var(--d-base) var(--ease-out),
+              background-color var(--d-base) var(--ease-out),
+              border-color var(--d-base) var(--ease-out),
+              box-shadow var(--d-slow) var(--ease-out),
+              opacity var(--d-base) var(--ease-out),
+              transform var(--d-base) var(--ease-out);
+}
+
+/* Cards and rows: 300ms, the platform's workhorse duration. */
+.status-card,
+.kpi-card,
+.location-cards,
+.sensor-card,
+.alert-item,
+.alert-row,
+.legend-item,
+.scenario-button,
+.stat-card,
+.detail-card,
+.prediction-card,
+.ms-panel,
+.ground-vibration-chart-section {
+  transition: transform var(--d-slow) var(--ease-out),
+              border-color var(--d-slow) var(--ease-out),
+              box-shadow var(--d-slow) var(--ease-out),
+              background-color var(--d-slow) var(--ease-out);
+}
+
+/* Press: a 5% squash, the platform's active:scale-95. Big enough to feel
+   under the finger, quick enough not to lag the click. */
+button:active,
+[role="button"]:active,
+.location-cards:active,
+.alert-row:active,
+.scenario-button:active,
+.ground-vibration-chart-section:active,
+.legend-item:active,
+.nav-link:active {
+  transform: scale(0.95);
+  transition-duration: var(--d-instant);
+}
+
+/* Buttons carrying their own hover transform keep it and only add the squash,
+   so the two do not fight. */
+.ms-btn:active,
+.generate-prediction-button:active,
+.run-simulation-button:active,
+.login-submit-button:active,
+.signup-submit-button:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================================================
+   Reduced motion — keep the interface, drop the movement
+   ========================================================================== */
+
+/* ==========================================================================
+   Reduced motion
+   What this setting asks for is the removal of *movement* — travel, parallax,
+   looping, anything vestibular. It does not ask for the removal of feedback.
+   Cutting every duration to zero, as the usual one-liner does, leaves an
+   interface where elements teleport between states, which is both harsher to
+   read and less informative than a short cross-fade.
+
+   So: continuous and decorative motion stops entirely, anything that travelled
+   becomes a brief fade in place, and ordinary state transitions survive at a
+   shortened duration.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Only the endless, ambient, unprompted motion goes: drifting background
+     glows, pulsing halos, the scanning line. Those run whether or not anyone
+     asked for them, and they are what the setting is actually about.
+
+     Everything the user initiates — a hover, a press, a panel opening, a page
+     arriving — keeps its animation. Those are direct responses to an action,
+     they are brief, and removing them does not calm the interface so much as
+     make it jump. The usual blanket rule that zeros every duration turns the
+     whole product into hard cuts. */
+  .app-ambient::before,
+  .app-ambient::after,
+  .ms-dot::after,
+  .ms-scanline,
+  .ms-skeleton,
+  .logo-node,
+  .logo-wave,
+  .brand-mark,
+  .brand-node,
+  .brand-wave,
+  .marker-halo,
+  .sensor-card.error .status-icon {
+    animation: none !important;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+
+  .ms-grain {
+    opacity: 0.02;
   }
 }
